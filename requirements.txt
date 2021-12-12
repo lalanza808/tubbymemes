@@ -1,0 +1,14 @@
+arrow
+Flask
+Flask-WTF
+Flask-SQLAlchemy
+Flask-Mobility
+peewee
+gunicorn
+huey
+redis
+Pillow
+ipfshttpclient
+python-dotenv
+requests
+web3
