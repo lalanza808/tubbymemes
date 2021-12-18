@@ -8,7 +8,7 @@ gunicorn
 huey
 redis
 Pillow
-ipfshttpclient
+ipfs-api
 python-dotenv
 requests
 web3

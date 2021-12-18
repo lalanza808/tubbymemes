@@ -130,3 +130,15 @@ dmypy.json
 
 # Data
 data/
+go-ipfs/
+*jpg
+*png
+*svg
+*mp4
+*webp
+*mkv
+*gif
+*jpeg
+*zip
+*tar.gz*
+*bz2
