@@ -3,7 +3,8 @@ from os import path
 from secrets import token_urlsafe
 from json import loads, dumps
 
-from flask import Blueprint, render_template, request, current_app, redirect
+from flask import Blueprint, render_template, request, current_app
+from flask import send_from_directory, redirect
 
 from suchwowx.models import Meme
 from suchwowx.factory import db
@@ -11,6 +12,11 @@ from suchwowx import config
 
 
 bp = Blueprint('meta', 'meta')
+
+@bp.route('/')
+def index():
+    memes = Meme.query.filter().order_by(Meme.create_date.desc())
+    return render_template('index.html', memes=memes)
 
 @bp.route('/new', methods=['GET', 'POST'])
 def new():
@@ -67,7 +73,16 @@ def new():
         meme=meme
     )
 
-@bp.route('/')
-def index():
-    memes = Meme.query.filter().order_by(Meme.create_date.desc())
-    return render_template('index.html', memes=memes)
+@bp.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    """
+    Retrieve an uploaded file from uploads directory.
+    """
+    return send_from_directory(f'{config.DATA_FOLDER}/uploads', filename)
+
+@bp.route('/meme/<meme_id>')
+def meme(meme_id):
+    meme = Meme.query.filter(Meme.id == meme_id).first()
+    if not meme:
+        return redirect('/')
+    return render_template('meme.html', meme=meme)

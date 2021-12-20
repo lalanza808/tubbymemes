@@ -10,21 +10,20 @@
       <p class="subtitle">
         Memes. <strong>Interplanetary</strong>!
       </p>
-      <a class="button is-primary" href="{{ url_for('meta.new') }}" up-target=".container">New Meme</a>
+      <a class="button" href="{{ url_for('meta.index') }}" up-target=".container">Go Home</a>
 
-      {% if memes %}
-        <div id="memes">
-        {% for meme in memes %}
+      {% if meme %}
+        <div id="meme">
           <div class="meme" style="padding-top:1em;">
-            <p>Meme: <a href="{{ url_for('meta.meme', meme_id=meme.id) }}" up-target=".container">{{ meme }}</a></p>
+            <p>Meme: {{ meme }}</p>
             <p>Upload path: {{ meme.upload_path }}</p>
             <p>Meta IPFS: {{ meme.meta_ipfs_hash }}</p>
             <p>Meme IPFS: {{ meme.meme_ipfs_hash }}</p>
             <p>Title: {{ meme.title }}</p>
             <p>Description: {{ meme.description }}</p>
             <p>Creator handle: {{ meme.creator_handle }}</p>
+            <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}">
           </div>
-          {% endfor %}
         </div>
       {% endif %}
 

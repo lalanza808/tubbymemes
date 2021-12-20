@@ -2,6 +2,7 @@ from uuid import uuid4
 from datetime import datetime
 
 from suchwowx.factory import db
+from suchwowx import config
 
 
 def rand_id():

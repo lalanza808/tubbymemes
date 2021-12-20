@@ -1,27 +1,18 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SuchWowX!</title>
-    <script src="https://unpkg.com/unpoly@2.5.0/unpoly.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/unpoly@2.5.0/unpoly.min.css">
-    <link rel="stylesheet" href="/static/css/bulma.min.css">
-    <link rel="stylesheet" href="/static/css/bulma.css.map">
-  </head>
+  {% include 'includes/head.html' %}
   <body>
   <section class="section">
     <div class="container">
       <h1 class="title">
-        SuchWowX. <br/>
-
+        SuchWowX.
       </h1>
       <p class="subtitle">
         Memes. <strong>Interplanetary</strong>!
       </p>
       <a class="button" href="{{ url_for('meta.index') }}" up-target=".container">Go Back</a>
 
-      <form method="POST" enctype="multipart/form-data" class="site-form" id="memeUpload" action="{{ url_for('meta.new') }}">
+      <form method="POST" enctype="multipart/form-data" class="site-form" id="memeUpload" action="{{ url_for('meta.new') }}" style="padding-top:1.5em;">
         <div class="field">
           <label class="label">File</label>
           <div class="control">
