@@ -1,9 +1,13 @@
 setup:
 	python3 -m venv .venv
 	.venv/bin/pip install -r requirements.txt
+	mkdir -p data/uploads
 
 shell:
 	bash manage.sh shell
+
+init:
+	bash manage.sh init
 
 dev:
 	bash manage.sh run
@@ -16,10 +20,5 @@ install-ipfs:
 	tar -xvzf go-ipfs_v0.10.0_linux-amd64.tar.gz
 	cd go-ipfs && bash install.sh
 
-huey:
-	mkdir -p data/
-	.venv/bin/huey_consumer suchwowx.tasks.huey -w 1 -v | tee -a data/huey.log
-
 kill:
-	pkill -e -f huey
 	pkill -e -f suchwowx

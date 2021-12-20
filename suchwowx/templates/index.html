@@ -13,65 +13,29 @@
   <section class="section">
     <div class="container">
       <h1 class="title">
-        SuchwowX. <br/>
+        SuchWowX. <br/>
 
       </h1>
       <p class="subtitle">
         Memes. <strong>Interplanetary</strong>!
       </p>
+      <a class="button is-primary" href="{{ url_for('meta.new') }}" up-target=".container">New Meme</a>
 
-      <!-- <a href="/next" class="one" up-target=".one">
-        Flip
-      </a>
-
-      <a href="/next" class="two" up-target=".two">
-        Flip
-      </a> -->
-
-      <form method="POST" enctype="multipart/form-data" class="site-form" id="memeUpload">
-        <div class="field">
-          <label class="label">File</label>
-          <div class="control">
-            <input class="filestyle" id="file" name="file" required type="file">
+      {% if memes %}
+        <div id="memes">
+        {% for meme in memes %}
+          <div class="meme" style="padding-top:1em;">
+            <p>Meme: {{ meme }}</p>
+            <p>Upload path: {{ meme.upload_path }}</p>
+            <p>Meta IPFS: {{ meme.meta_ipfs_hash }}</p>
+            <p>Meme IPFS: {{ meme.meme_ipfs_hash }}</p>
+            <p>Title: {{ meme.title }}</p>
+            <p>Description: {{ meme.description }}</p>
+            <p>Creator handle: {{ meme.creator_handle }}</p>
           </div>
+          {% endfor %}
         </div>
-
-        <div class="field">
-          <label class="label">Title</label>
-          <div class="control">
-            <input class="input" type="text" placeholder="Title of your meme" name="title">
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Creator</label>
-          <div class="control">
-            <input class="input" type="text" placeholder="Your handle" name="creator">
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label">Description</label>
-          <div class="control">
-            <textarea class="textarea" placeholder="Description..." name="description"></textarea>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox">
-              I agree to support the ongoing funding of exploratory meme missions
-            </label>
-          </div>
-        </div>
-
-        <div class="field is-grouped">
-          <div class="control">
-            <button class="button is-primary">Submit</button>
-          </div>
-        </div>
-      </form>
+      {% endif %}
 
     </div>
   </section>

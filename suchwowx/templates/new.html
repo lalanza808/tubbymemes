@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SuchWowX!</title>
+    <script src="https://unpkg.com/unpoly@2.5.0/unpoly.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/unpoly@2.5.0/unpoly.min.css">
+    <link rel="stylesheet" href="/static/css/bulma.min.css">
+    <link rel="stylesheet" href="/static/css/bulma.css.map">
+  </head>
+  <body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">
+        SuchWowX. <br/>
+
+      </h1>
+      <p class="subtitle">
+        Memes. <strong>Interplanetary</strong>!
+      </p>
+      <a class="button" href="{{ url_for('meta.index') }}" up-target=".container">Go Back</a>
+
+      <form method="POST" enctype="multipart/form-data" class="site-form" id="memeUpload" action="{{ url_for('meta.new') }}">
+        <div class="field">
+          <label class="label">File</label>
+          <div class="control">
+            <input class="filestyle" id="file" name="file" required type="file">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Title</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Title of your meme" name="title">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Creator</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Your handle" name="creator">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Description</label>
+          <div class="control">
+            <textarea class="textarea" placeholder="Description..." name="description"></textarea>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox">
+              I agree to support the ongoing funding of exploratory meme missions
+            </label>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-primary" up-target=".container">Submit</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </section>
+  </body>
+</html>
