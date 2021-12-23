@@ -10,19 +10,37 @@
       <p class="subtitle">
         Memes. <strong>Interplanetary</strong>!
       </p>
-      <a class="button is-primary" href="{{ url_for('meta.new') }}" up-target=".container">New Meme</a>
+      <a class="button is-primary" href="{{ url_for('meta.new') }}">New Meme</a>
+
+      {% if get_flashed_messages(with_categories=true) %}
+        <p>
+          </br>
+          You can run your own local IPFS instance and maintain metadata and artwork,
+          </br>
+          try installing the software and running the following:
+        </p>
+        <code>$ ipfs daemon</code>
+      {% endif %}
 
       {% if memes %}
         <div id="memes">
         {% for meme in memes %}
           <div class="meme" style="padding-top:1em;">
-            <p>Meme: <a href="{{ url_for('meta.meme', meme_id=meme.id) }}" up-target=".container">{{ meme }}</a></p>
+            <p>Meme: <a href="{{ url_for('meta.meme', meme_id=meme.id) }}" up-preload up-follow=".container">{{ meme }}</a></p>
             <p>Upload path: {{ meme.upload_path }}</p>
             <p>Meta IPFS: {{ meme.meta_ipfs_hash }}</p>
             <p>Meme IPFS: {{ meme.meme_ipfs_hash }}</p>
             <p>Title: {{ meme.title }}</p>
             <p>Description: {{ meme.description }}</p>
             <p>Creator handle: {{ meme.creator_handle }}</p>
+            {% if meme.upload_path.endswith('mp4') %}
+              <video style="max-height: 60vh!important;max-width:80px;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
+                <source src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% else %}
+              <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" width="200px" class="img-fluid" style="" />
+            {% endif %}
           </div>
           {% endfor %}
         </div>
@@ -30,5 +48,6 @@
 
     </div>
   </section>
+  {% include 'includes/footer.html' %}
   </body>
 </html>

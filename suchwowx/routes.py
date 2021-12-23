@@ -2,9 +2,10 @@ import ipfsApi
 from os import path
 from secrets import token_urlsafe
 from json import loads, dumps
+from requests.exceptions import HTTPError
 
 from flask import Blueprint, render_template, request, current_app
-from flask import send_from_directory, redirect
+from flask import send_from_directory, redirect, flash, url_for
 
 from suchwowx.models import Meme
 from suchwowx.factory import db
@@ -21,7 +22,20 @@ def index():
 @bp.route('/new', methods=['GET', 'POST'])
 def new():
     meme = None
+    form_err = False
+    try:
+        client = ipfsApi.Client('127.0.0.1', 5001)
+        client.add_json({})
+    except Exception as e:
+        msg = f'[!] IPFS Error: {e}'
+        print(msg)
+        flash(msg, 'error')
+        if "file" in request.files:
+            return '<script>window.history.back()</script>'
+        return redirect(url_for('meta.index'))
     if "file" in request.files:
+        if form_err:
+            return '<script>window.history.back()</script>'
         title = request.form.get('title')
         description = request.form.get('description')
         creator = request.form.get('creator')
@@ -65,7 +79,7 @@ def new():
             db.session.commit()
             return redirect('/')
         except ConnectionError:
-            print('[!] Unable to connect to local ipfs')
+            flash('[!] Unable to connect to local ipfs', 'error')
         except Exception as e:
             print(e)
     return render_template(

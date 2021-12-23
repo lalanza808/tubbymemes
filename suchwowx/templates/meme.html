@@ -10,7 +10,7 @@
       <p class="subtitle">
         Memes. <strong>Interplanetary</strong>!
       </p>
-      <a class="button" href="{{ url_for('meta.index') }}" up-target=".container">Go Home</a>
+      <a class="button" href="{{ url_for('meta.index') }}" up-preload up-follow=".container">Go Home</a>
 
       {% if meme %}
         <div id="meme">
@@ -22,7 +22,14 @@
             <p>Title: {{ meme.title }}</p>
             <p>Description: {{ meme.description }}</p>
             <p>Creator handle: {{ meme.creator_handle }}</p>
-            <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}">
+            {% if meme.upload_path.endswith('mp4') %}
+              <video style="max-height: 60vh!important;max-width:100%;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
+                <source src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {% else %}
+              <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}"class="img-fluid" style="" />
+            {% endif %}
           </div>
         </div>
       {% endif %}
