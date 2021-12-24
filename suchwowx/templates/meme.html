@@ -4,37 +4,33 @@
   <body>
   <section class="section">
     <div class="container">
-      <h1 class="title">
-        SuchWowX.
-      </h1>
-      <p class="subtitle">
-        Memes. <strong>Interplanetary</strong>!
-      </p>
-      <a class="button" href="{{ url_for('meta.index') }}" up-preload up-follow=".container">Go Home</a>
+
+      {% include 'includes/navbar.html' %}
 
       {% if meme %}
-        <div id="meme">
-          <div class="meme" style="padding-top:1em;">
-            <p>Meme: {{ meme }}</p>
-            <p>Upload path: {{ meme.upload_path }}</p>
-            <p>Meta IPFS: {{ meme.meta_ipfs_hash }}</p>
-            <p>Meme IPFS: {{ meme.meme_ipfs_hash }}</p>
-            <p>Title: {{ meme.title }}</p>
-            <p>Description: {{ meme.description }}</p>
-            <p>Creator handle: {{ meme.creator_handle }}</p>
+        <div id="screen">
+          <div class="screen">
             {% if meme.upload_path.endswith('mp4') %}
               <video style="max-height: 60vh!important;max-width:100%;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
                 <source src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
             {% else %}
-              <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}"class="img-fluid" style="" />
+              <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" id="memeImage" />
             {% endif %}
+            </br>
+            <p>Title: <strong>{{ meme.title }}</strong></p>
+            <p>Description: <strong>{{ meme.description }}</strong></p>
+            <p>Creator handle: <a href="{{ url_for('meta.creator', handle=meme.creator_handle) }}" up-layer="new">{{ meme.creator_handle }}</a></p>
+            <p>Meta IPFS: <a href="https://ipfs.io/ipfs/{{ meme.meta_ipfs_hash }}">{{ meme.meta_ipfs_hash }}</a></p>
+            <p>Meme IPFS: <a href="https://ipfs.io/ipfs/{{ meme.meme_ipfs_hash }}">{{ meme.meme_ipfs_hash }}</a></p>
+            <p>Meme ID: <code>{{ meme }}</code></p>
           </div>
         </div>
       {% endif %}
 
     </div>
   </section>
+
   </body>
 </html>

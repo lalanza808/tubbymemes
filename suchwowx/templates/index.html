@@ -4,13 +4,7 @@
   <body>
   <section class="section">
     <div class="container">
-      <h1 class="title">
-        SuchWowX.
-      </h1>
-      <p class="subtitle">
-        Memes. <strong>Interplanetary</strong>!
-      </p>
-      <a class="button is-primary" href="{{ url_for('meta.new') }}">New Meme</a>
+      {% include 'includes/navbar.html' %}
 
       {% if get_flashed_messages(with_categories=true) %}
         <p>
@@ -20,19 +14,16 @@
           try installing the software and running the following:
         </p>
         <code>$ ipfs daemon</code>
+      </br></br>
       {% endif %}
 
       {% if memes %}
-        <div id="memes">
-        {% for meme in memes %}
-          <div class="meme" style="padding-top:1em;">
-            <p>Meme: <a href="{{ url_for('meta.meme', meme_id=meme.id) }}" up-preload up-follow=".container">{{ meme }}</a></p>
-            <p>Upload path: {{ meme.upload_path }}</p>
-            <p>Meta IPFS: {{ meme.meta_ipfs_hash }}</p>
-            <p>Meme IPFS: {{ meme.meme_ipfs_hash }}</p>
-            <p>Title: {{ meme.title }}</p>
-            <p>Description: {{ meme.description }}</p>
-            <p>Creator handle: {{ meme.creator_handle }}</p>
+        {% for _meme in memes | batch(4) %}
+        <div class="columns">
+
+          {% for meme in _meme %}
+          <div class="column" style="padding-top:1em;">
+            <a href="{{ url_for('meta.meme', meme_id=meme.id) }}" up-preload up-follow=".container">
             {% if meme.upload_path.endswith('mp4') %}
               <video style="max-height: 60vh!important;max-width:80px;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
                 <source src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" type="video/mp4">
@@ -41,9 +32,12 @@
             {% else %}
               <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" width="200px" class="img-fluid" style="" />
             {% endif %}
+            </a>
           </div>
+
           {% endfor %}
         </div>
+        {% endfor %}
       {% endif %}
 
     </div>

@@ -20,5 +20,18 @@ install-ipfs:
 	tar -xvzf go-ipfs_v0.10.0_linux-amd64.tar.gz
 	cd go-ipfs && bash install.sh
 
+install-avax:
+	wget https://github.com/ava-labs/avalanchego/releases/download/v1.7.3/avalanchego-linux-amd64-v1.7.3.tar.gz
+	tar -xzvf avalanchego-linux-amd64-v1.7.3.tar.gz
+
+run-ipfs:
+	ipfs daemon
+
+run-avax:
+	./avalanchego-v1.7.3/avalanchego
+
+run-avax-test:
+	./avalanchego-v1.7.3/avalanchego --network-id fuji
+
 kill:
 	pkill -e -f suchwowx

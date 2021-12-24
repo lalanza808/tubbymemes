@@ -131,6 +131,7 @@ dmypy.json
 # Data
 data/
 go-ipfs/
+avalanchego-v1.7.3
 *jpg
 *png
 *svg

@@ -1,11 +1,12 @@
-import ipfsApi
 from os import path
 from secrets import token_urlsafe
 from json import loads, dumps
-from requests.exceptions import HTTPError
 
+import ipfsApi
 from flask import Blueprint, render_template, request, current_app
 from flask import send_from_directory, redirect, flash, url_for
+from requests.exceptions import HTTPError
+from web3 import Web3
 
 from suchwowx.models import Meme
 from suchwowx.factory import db
@@ -17,7 +18,15 @@ bp = Blueprint('meta', 'meta')
 @bp.route('/')
 def index():
     memes = Meme.query.filter().order_by(Meme.create_date.desc())
-    return render_template('index.html', memes=memes)
+    w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9650'))
+    contract_address = w3.toChecksumAddress(config.CONTRACT_ADDRESS)
+    contract_abi = config.CONTRACT_ABI
+    contract = w3.eth.contract(
+        address=contract_address,
+        abi=contract_abi
+    )
+    # total_supply = contract.functions.totalSupply().call()
+    return render_template('index.html', memes=memes, contract=contract)
 
 @bp.route('/new', methods=['GET', 'POST'])
 def new():
@@ -100,3 +109,7 @@ def meme(meme_id):
     if not meme:
         return redirect('/')
     return render_template('meme.html', meme=meme)
+
+@bp.route('/creator/<handle>')
+def creator(handle):
+    return render_template('includes/creator.html')
