@@ -6,6 +6,7 @@
     Memes. <strong>Interplanetary</strong>!
   </p>
   {% if request.path == '/' %}
+  <a class="button is-secondary" href="{{ url_for('meta.about') }}">About</a>
   <a class="button is-primary" href="{{ url_for('meta.new') }}">New Meme</a>
   {% else %}
   <a class="button" href="{{ url_for('meta.index') }}" up-preload up-follow=".container">Go Home</a>

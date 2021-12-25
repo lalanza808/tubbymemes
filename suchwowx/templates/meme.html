@@ -22,8 +22,8 @@
             <p>Title: <strong>{{ meme.title }}</strong></p>
             <p>Description: <strong>{{ meme.description }}</strong></p>
             <p>Creator handle: <a href="{{ url_for('meta.creator', handle=meme.creator_handle) }}" up-layer="new">{{ meme.creator_handle }}</a></p>
-            <p>Meta IPFS: <a href="https://ipfs.io/ipfs/{{ meme.meta_ipfs_hash }}">{{ meme.meta_ipfs_hash }}</a></p>
-            <p>Meme IPFS: <a href="https://ipfs.io/ipfs/{{ meme.meme_ipfs_hash }}">{{ meme.meme_ipfs_hash }}</a></p>
+            <p>Meta IPFS: <a href="{{ config.IPFS_SERVER }}/ipfs/{{ meme.meta_ipfs_hash }}" target=_self up-preload up-follow=".container">{{ meme.meta_ipfs_hash }}</a></p>
+            <p>Meme IPFS: <a href="{{ config.IPFS_SERVER }}/ipfs/{{ meme.meme_ipfs_hash }}" target=_self up-preload up-follow=".container">{{ meme.meme_ipfs_hash }}</a></p>
             <p>Meme ID: <code>{{ meme }}</code></p>
           </div>
         </div>

@@ -4,9 +4,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # App
-SECRET_KEY = getenv('SECRET_KEY', 'yyyyyyyyyyyyy')       # whatever you want it to be
-DATA_FOLDER = getenv('DATA_FOLDER', '/path/to/uploads')  # some stable storage path
+SECRET_KEY = getenv('SECRET_KEY', 'yyyyyyyyyyyyy')            # whatever you want it to be
+DATA_FOLDER = getenv('DATA_FOLDER', '/path/to/uploads')       # some stable storage path
 SERVER_NAME = getenv('SERVER_NAME', '127.0.0.1:5000')         # name of your DNS resolvable site (.com)
+IPFS_SERVER = getenv('IPFS_SERVER', 'http://127.0.0.1:8080')  # ip/endpoint of ipfs explorer
 
 # Cache
 CACHE_HOST = getenv('CACHE_HOST', 'localhost')

@@ -28,6 +28,10 @@ def index():
     # total_supply = contract.functions.totalSupply().call()
     return render_template('index.html', memes=memes, contract=contract)
 
+@bp.route('/about')
+def about():
+    return render_template('about.html')
+
 @bp.route('/new', methods=['GET', 'POST'])
 def new():
     meme = None
