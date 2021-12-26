@@ -4,6 +4,22 @@
   margin: 0 auto;
 }
 
-/* #memeImage {
-  cursor: zoom-in;
-} */
+.card {
+  margin: 1em;
+  padding: 1em;
+  width: 300px;
+  border-radius: 6px;
+}
+
+.image {
+  text-align: center;
+}
+
+.image img, .image video {
+  border-radius: 6px;
+}
+
+.img-fluid {
+  max-height: 200px;
+  object-fit: cover;
+}
