@@ -7,13 +7,14 @@
       {% include 'includes/navbar.html' %}
 
       {% if get_flashed_messages(with_categories=true) %}
+      <div class="screen">
         <p>
-          </br>
           You can run your own local IPFS instance and maintain metadata and artwork,
           </br>
           try installing the software and running the following:
         </p>
         <code>$ ipfs daemon</code>
+      </div>
       </br></br>
       {% endif %}
 
@@ -25,14 +26,14 @@
           <div class="card">
             <div class="card-image">
               <figure class="image">
-                <a href="{{ url_for('meta.meme', meme_id=meme.id) }}" up-preload up-follow=".container">
-                  {% if meme.upload_path.endswith('mp4') %}
+                <a href="{{ url_for('meme.meme', meme_id=meme.id) }}" up-preload up-follow=".container">
+                  {% if meme.file_name.endswith('mp4') %}
                     <video class="img-fluid" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
-                      <source src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" type="video/mp4">
+                      <source src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" type="video/mp4">
                       Your browser does not support the video tag.
                     </video>
                   {% else %}
-                    <img alt="{{ meme.title }}" src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" width="200px" class="img-fluid" style="" />
+                    <img alt="{{ meme.title }}" src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" width="200px" class="img-fluid" style="" />
                   {% endif %}
                 </a>
               </figure>

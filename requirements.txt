@@ -4,6 +4,7 @@ Flask
 Flask-WTF
 Flask-SQLAlchemy
 Flask-Mobility
+Flask-Login
 peewee
 gunicorn
 huey
@@ -13,3 +14,4 @@ ipfs-api
 python-dotenv
 requests
 web3
+flake8

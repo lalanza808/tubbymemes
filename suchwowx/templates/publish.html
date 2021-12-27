@@ -10,9 +10,9 @@
       <p class="subtitle">
         Memes. <strong>Interplanetary</strong>!
       </p>
-      <a class="button" href="{{ url_for('meta.index') }}" up-preload up-follow=".container">Go Back</a>
+      <a class="button" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">Go Back</a>
 
-      <form method="POST" enctype="multipart/form-data" class="site-form" id="memeUpload" action="{{ url_for('meta.new') }}" style="padding-top:1.5em;">
+      <form method="POST" enctype="multipart/form-data" class="site-form" id="memeUpload" action="{{ url_for('meme.publish') }}" style="padding-top:1.5em;">
         <div class="field">
           <label class="label">File</label>
           <div class="control">

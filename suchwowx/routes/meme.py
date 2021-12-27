@@ -4,16 +4,17 @@ from json import loads, dumps
 
 import ipfsApi
 from flask import Blueprint, render_template, request, current_app
-from flask import send_from_directory, redirect, flash, url_for
+from flask import send_from_directory, redirect, flash, url_for, jsonify
+from flask_login import logout_user, current_user, login_user
 from requests.exceptions import HTTPError
 from web3 import Web3
 
-from suchwowx.models import Meme
+from suchwowx.models import Meme, User
 from suchwowx.factory import db
 from suchwowx import config
 
 
-bp = Blueprint('meta', 'meta')
+bp = Blueprint('meme', 'meme')
 
 @bp.route('/')
 def index():
@@ -28,12 +29,11 @@ def index():
     # total_supply = contract.functions.totalSupply().call()
     return render_template('index.html', memes=memes, contract=contract)
 
-@bp.route('/about')
-def about():
-    return render_template('about.html')
-
-@bp.route('/new', methods=['GET', 'POST'])
-def new():
+@bp.route('/publish', methods=['GET', 'POST'])
+def publish():
+    if not current_user.is_authenticated:
+        flash('You need to connect your wallet first.', 'warning')
+        return redirect(url_for('meme.index'))
     meme = None
     form_err = False
     try:
@@ -45,7 +45,7 @@ def new():
         flash(msg, 'error')
         if "file" in request.files:
             return '<script>window.history.back()</script>'
-        return redirect(url_for('meta.index'))
+        return redirect(url_for('meme.index'))
     if "file" in request.files:
         if form_err:
             return '<script>window.history.back()</script>'
@@ -65,9 +65,7 @@ def new():
             print(artwork_hashes)
             artwork_hash = artwork_hashes[0]['Hash']
             print(artwork_hash)
-            # client.pin_add(artwork_hash)
             print(f'[+] Uploaded artwork to IPFS: {artwork_hash}')
-            # Create meta json
             meta = {
                 'name': title,
                 'description': description,
@@ -78,10 +76,9 @@ def new():
                 }
             }
             meta_hash = client.add_json(meta)
-            # client.pin_add(meta_hash)
             print(f'[+] Uploaded metadata to IPFS: {meta_hash}')
             meme = Meme(
-                upload_path=filename,
+                file_name=filename,
                 meta_ipfs_hash=meta_hash,
                 meme_ipfs_hash=artwork_hash,
                 title=title,
@@ -96,16 +93,10 @@ def new():
         except Exception as e:
             print(e)
     return render_template(
-        'new.html',
+        'publish.html',
         meme=meme
     )
 
-@bp.route('/uploads/<path:filename>')
-def uploaded_file(filename):
-    """
-    Retrieve an uploaded file from uploads directory.
-    """
-    return send_from_directory(f'{config.DATA_FOLDER}/uploads', filename)
 
 @bp.route('/meme/<meme_id>')
 def meme(meme_id):
@@ -113,7 +104,3 @@ def meme(meme_id):
     if not meme:
         return redirect('/')
     return render_template('meme.html', meme=meme)
-
-@bp.route('/creator/<handle>')
-def creator(handle):
-    return render_template('includes/creator.html')

@@ -10,18 +10,18 @@
       {% if meme %}
         <div id="screen">
           <div class="screen">
-            {% if meme.upload_path.endswith('mp4') %}
+            {% if meme.file_name.endswith('mp4') %}
               <video style="max-height: 60vh!important;max-width:100%;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
-                <source src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" type="video/mp4">
+                <source src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
             {% else %}
-              <img src="{{ url_for('meta.uploaded_file', filename=meme.upload_path) }}" id="memeImage" />
+              <img src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" id="memeImage" />
             {% endif %}
             </br>
             <p>Title: <strong>{{ meme.title }}</strong></p>
             <p>Description: <strong>{{ meme.description }}</strong></p>
-            <p>Creator handle: <a href="{{ url_for('meta.creator', handle=meme.creator_handle) }}" up-layer="new" up-align="center">{{ meme.creator_handle }}</a></p>
+            <p>Creator handle: <a up-layer="new" up-align="center">{{ meme.creator_handle }}</a></p>
             <p>Meta IPFS: <a href="{{ config.IPFS_SERVER }}/ipfs/{{ meme.meta_ipfs_hash }}" target=_self up-preload up-follow=".container">{{ meme.meta_ipfs_hash }}</a></p>
             <p>Meme IPFS: <a href="{{ config.IPFS_SERVER }}/ipfs/{{ meme.meme_ipfs_hash }}" target=_self up-preload up-follow=".container">{{ meme.meme_ipfs_hash }}</a></p>
             <p>Meme ID: <code>{{ meme }}</code></p>
