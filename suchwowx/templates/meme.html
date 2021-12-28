@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   {% include 'includes/head.html' %}
@@ -8,22 +9,34 @@
       {% include 'includes/navbar.html' %}
 
       {% if meme %}
+        {% if meme.meta_ipfs_hash %}
+          {% set meta_url = config.IPFS_SERVER + "/ipfs/" + meme.meta_ipfs_hash %}
+          {% set meme_url = config.IPFS_SERVER + "/ipfs/" + meme.meme_ipfs_hash %}
+        {% else %}
+          {% set meta_url = "" %}
+          {% set meme_url = url_for('meta.uploaded_file', filename=meme.file_name, _external=True) %}
+        {% endif %}
+
         <div id="screen">
           <div class="screen">
             {% if meme.file_name.endswith('mp4') %}
               <video style="max-height: 60vh!important;max-width:100%;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
-                <source src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" type="video/mp4">
+                <source src="{{ meme_url }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
             {% else %}
-              <img src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" id="memeImage" />
+              <img src="{{ meme_url }}" id="memeImage" />
             {% endif %}
             </br>
             <p>Title: <strong>{{ meme.title }}</strong></p>
             <p>Description: <strong>{{ meme.description }}</strong></p>
-            <p>Creator handle: <a up-layer="new" up-align="center">{{ meme.creator_handle }}</a></p>
-            <p>Meta IPFS: <a href="{{ config.IPFS_SERVER }}/ipfs/{{ meme.meta_ipfs_hash }}" target=_self up-preload up-follow=".container">{{ meme.meta_ipfs_hash }}</a></p>
-            <p>Meme IPFS: <a href="{{ config.IPFS_SERVER }}/ipfs/{{ meme.meme_ipfs_hash }}" target=_self up-preload up-follow=".container">{{ meme.meme_ipfs_hash }}</a></p>
+            <p>Creator handle: <a href="{{ url_for('user.show', handle=meme.creator_handle) }}" up-follow=".container">{{ meme.creator_handle }}</a></p>
+            {% if meme.meta_ipfs_hash %}
+            <p>Meta IPFS: <a href="{{ meta_url }}" target=_self up-preload up-follow=".container">{{ meme.meta_ipfs_hash }}</a></p>
+            {% endif %}
+            {% if meme.meme_ipfs_hash %}
+            <p>Meme IPFS: <a href="{{ meme_url }}" target=_self up-preload up-follow=".container">{{ meme.meme_ipfs_hash }}</a></p>
+            {% endif %}
             <p>Meme ID: <code>{{ meme }}</code></p>
           </div>
         </div>

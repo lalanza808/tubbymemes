@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  {% include 'includes/head.html' %}
+  <body>
+  <section class="section">
+    <div class="container">
+
+      {% include 'includes/navbar.html' %}
+
+      {% if user %}
+        <div id="screen">
+          <div class="screen">
+            <p><strong>From Avax Chain</strong></p>
+            <p>Handle: <input type="text" placeholder="{{ user.handle }}" value="{{ user.handle }}"></input>
+            <img src="{{ user.get_profile_image() }}" id="profileImage" />
+            </br></br>
+            <p><strong>From Local Database</strong></p>
+            <p>Register Date: <strong>{{ user.register_date }}</strong></p>
+            <p>Login Date: <strong>{{ user.last_login_date }}</strong></p>
+            <p>Moderator: <strong>{{ user.is_moderator() }}</strong></p>
+            <p>Verified: <strong>{{ user.verified }}</strong></p>
+            {% if user.bio %}
+            <p>Bio: {{ user.bio }}</p>
+            {% endif %}
+            {% if user.website %}
+            <p>Website: <a href="{{ user.website_url }}" target="_blank">{{ user.website_url }}</a></p>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  </body>
+</html>
