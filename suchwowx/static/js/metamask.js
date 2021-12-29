@@ -1,5 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
-  onboardMetaMask()
+  onboardMetaMask();
 })
 
 async function onboardMetaMask(){
@@ -25,6 +25,7 @@ async function onboardMetaMask(){
         onboardButton.classList.add('is-loading');
         onboardButton.disabled = true;
         let userExists;
+        await confirmAvalanche();
         const allAccounts = await window.ethereum.request({
           method: 'eth_requestAccounts',
         });

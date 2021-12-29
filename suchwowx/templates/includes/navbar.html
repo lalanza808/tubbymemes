@@ -11,7 +11,7 @@
     <a class="button is-secondary" href="{{ url_for('user.show', handle=current_user.handle) }}" up-follow=".container" up-preload>Profile</a>
     <a class="button is-danger" href="{{ url_for('meta.disconnect') }}">Disconnect</a>
     {% if current_user.is_moderator() %}
-      <a class="button is-warning" href="{{ url_for('meme.mod') }}">Mod</a>
+      <a class="button is-warning" href="{{ url_for('meme.mod') }}" up-preload up-follow=".container">Mod</a>
     {% endif %}
     <a class="button is-primary" href="{{ url_for('meme.publish') }}">New Meme</a>
   {% else %}
