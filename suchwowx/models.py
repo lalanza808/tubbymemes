@@ -95,7 +95,7 @@ class Meme(db.Model):
     meme_ipfs_hash = db.Column(db.String(100), unique=True, nullable=True)
     title = db.Column(db.String(50))
     description = db.Column(db.String(400), nullable=True)
-    creator_handle = db.Column(db.String(50), nullable=True)
+    minted = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return str(f'meme-{self.id}')
