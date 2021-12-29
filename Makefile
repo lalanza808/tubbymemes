@@ -7,7 +7,7 @@ shell:
 	bash manage.sh shell
 
 init:
-	bash manage.sh init
+	.venv/bin/alembic upgrade head
 
 dev:
 	bash manage.sh run
