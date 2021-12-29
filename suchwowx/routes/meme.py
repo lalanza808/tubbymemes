@@ -1,4 +1,4 @@
-from os import path
+from os import path, remove
 from secrets import token_urlsafe
 from json import loads, dumps
 
@@ -10,6 +10,7 @@ from requests.exceptions import HTTPError
 from web3 import Web3
 
 from suchwowx.models import Meme, User
+from suchwowx.helpers import upload_to_ipfs
 from suchwowx.factory import db
 from suchwowx import config
 
@@ -36,8 +37,8 @@ def mod():
         return redirect(url_for('meme.index'))
     memes = Meme.query.filter(
         Meme.meta_ipfs_hash == None
-    ).order_by(Meme.create_date.desc())
-    return render_template('review.html', memes=memes)
+    ).order_by(Meme.create_date.asc())
+    return render_template('mod.html', memes=memes)
 
 @bp.route('/publish', methods=['GET', 'POST'])
 def publish():
@@ -55,7 +56,7 @@ def publish():
         flash(msg, 'error')
         if "file" in request.files:
             return '<script>window.history.back()</script>'
-        return redirect(url_for('meme.index'))
+        return redirect(url_for('meme.index') + '?ipfs_error=1')
     if "file" in request.files:
         if form_err:
             return '<script>window.history.back()</script>'
@@ -70,38 +71,22 @@ def publish():
         full_path = f'{config.DATA_FOLDER}/uploads/{filename}'
         file.save(full_path)
         try:
-            meta_hash = None
-            artwork_hash = None
-            if current_user.verified or current_user.is_moderator():
-                client = ipfsApi.Client('127.0.0.1', 5001)
-                artwork_hashes = client.add(full_path)
-                print(artwork_hashes)
-                artwork_hash = artwork_hashes[0]['Hash']
-                print(artwork_hash)
-                print(f'[+] Uploaded artwork to IPFS: {artwork_hash}')
-                meta = {
-                    'name': title,
-                    'description': description,
-                    'image': f'ipfs://{artwork_hash}',
-                    'by': creator,
-                    'properties': {
-                        'creator': creator
-                    }
-                }
-                meta_hash = client.add_json(meta)
-                print(f'[+] Uploaded metadata to IPFS: {meta_hash}')
-                flash('Published new meme to IPFS', 'success')
             meme = Meme(
                 file_name=filename,
-                meta_ipfs_hash=meta_hash,
-                meme_ipfs_hash=artwork_hash,
                 title=title,
                 description=description,
                 creator_handle=creator
             )
             db.session.add(meme)
             db.session.commit()
-            flash('Published new meme to database', 'success')
+            if current_user.verified or current_user.is_moderator():
+                res = upload_to_ipfs(meme.id)
+                meme.meta_ipfs_hash = res[0]
+                meme.meme_ipfs_hash = res[1]
+                db.session.commit()
+                flash('Published new meme to local database and IPFS.', 'success')
+            else:
+                flash('Published new meme to database for review by moderators.', 'success')
             return redirect(url_for('meme.index'))
         except ConnectionError:
             flash('[!] Unable to connect to local ipfs', 'error')
@@ -112,16 +97,56 @@ def publish():
         meme=meme
     )
 
-
 @bp.route('/meme/<meme_id>')
-def meme(meme_id):
+def show(meme_id):
     meme = Meme.query.filter(Meme.id == meme_id).first()
     if not meme:
         return redirect('/')
     if not meme.meta_ipfs_hash and not current_user.is_authenticated:
-        flash('You need to be a moderator to view that meme', 'warning')
+        flash('You need to be a moderator to view that meme.', 'warning')
         return redirect(url_for('meme.index'))
     elif not meme.meta_ipfs_hash and not current_user.is_moderator():
-        flash('You need to be a moderator to view that meme', 'warning')
+        flash('You need to be a moderator to view that meme.', 'warning')
         return redirect(url_for('meme.index'))
     return render_template('meme.html', meme=meme)
+
+@bp.route('/meme/<meme_id>/<action>')
+def approve(meme_id, action):
+    if not current_user.is_authenticated:
+        flash('You need to be logged in to reach this page.', 'warning')
+        return redirect(url_for('meme.index'))
+    if not current_user.is_moderator():
+        flash('You need to be a moderator to reach this page.', 'warning')
+        return redirect(url_for('meme.index'))
+    meme = Meme.query.get(meme_id)
+    if not meme:
+        flash('That meme does not exist.', 'warning')
+        return redirect(url_for('meme.index'))
+    if meme.meta_ipfs_hash != None:
+        flash('That meme already has been published to IPFS.', 'warning')
+        return redirect(url_for('meme.show', meme_id=meme.id))
+    if action == 'approve':
+        res = upload_to_ipfs(meme.id)
+        if not res:
+            flash('Unable to post to IPFS, daemon may be offline.', 'error')
+            return redirect(url_for('meme.show', meme_id=meme.id))
+        existing_meta_ipfs = Meme.query.filter(Meme.meta_ipfs_hash == res[0]).first()
+        existing_meme_ipfs = Meme.query.filter(Meme.meme_ipfs_hash == res[1]).first()
+        if existing_meta_ipfs or existing_meme_ipfs:
+            flash('Cannot use an existing IPFS hash for either metadata or memes.', 'warning')
+            return redirect(url_for('meme.show', meme_id=meme.id))
+        meme.meta_ipfs_hash = res[0]
+        meme.meme_ipfs_hash = res[1]
+        db.session.commit()
+        flash('Published new meme to IPFS.', 'success')
+    elif action == 'deny':
+        # delete image
+        # delete from database
+        if path.exists(meme.get_fs_path()):
+            remove(meme.get_fs_path())
+        db.session.delete(meme)
+        db.session.commit()
+        flash('Deleted image and removed meme from database.', 'success')
+    else:
+        flash('Unknown action.', 'warning')
+    return redirect(url_for('meme.mod'))

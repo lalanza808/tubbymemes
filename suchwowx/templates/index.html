@@ -6,16 +6,14 @@
     <div class="container">
       {% include 'includes/navbar.html' %}
 
-      {% if get_flashed_messages(with_categories=true) %}
+      {% if request.args.get('ipfs_error') %}
       <div class="screen">
         <p>
           You can run your own local IPFS instance and maintain metadata and artwork,
-          </br>
           try installing the software and running the following:
         </p>
         <code>$ ipfs daemon</code>
       </div>
-      </br></br>
       {% endif %}
 
       {% if memes %}
@@ -26,7 +24,7 @@
           <div class="card">
             <div class="card-image">
               <figure class="image">
-                <a href="{{ url_for('meme.meme', meme_id=meme.id) }}" up-preload up-follow=".container">
+                <a href="{{ url_for('meme.show', meme_id=meme.id) }}" up-preload up-follow=".container">
                   {% if meme.file_name.endswith('mp4') %}
                     <video class="img-fluid" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
                       <source src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" type="video/mp4">

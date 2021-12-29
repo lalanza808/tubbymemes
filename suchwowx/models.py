@@ -99,3 +99,6 @@ class Meme(db.Model):
 
     def __repr__(self):
         return str(f'meme-{self.id}')
+
+    def get_fs_path(self):
+        return f'{config.DATA_FOLDER}/uploads/{self.file_name}'

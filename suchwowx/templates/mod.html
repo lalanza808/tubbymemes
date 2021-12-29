@@ -14,7 +14,7 @@
           <div class="card">
             <div class="card-image">
               <figure class="image">
-                <a href="{{ url_for('meme.meme', meme_id=meme.id) }}" up-preload up-follow=".container">
+                <a href="{{ url_for('meme.show', meme_id=meme.id) }}" up-preload up-follow=".container">
                   {% if meme.file_name.endswith('mp4') %}
                     <video class="img-fluid" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
                       <source src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" type="video/mp4">
