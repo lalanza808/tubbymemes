@@ -35,6 +35,7 @@ class User(db.Model):
     profile_image = db.Column(db.String(300), nullable=True)
     website_url = db.Column(db.String(120), nullable=True)
     moderator = db.relationship('Moderator', back_populates='user')
+    memes = db.relationship('Meme', back_populates='user')
 
     def __repr__(self):
         return str(self.handle)
@@ -96,6 +97,8 @@ class Meme(db.Model):
     title = db.Column(db.String(50))
     description = db.Column(db.String(400), nullable=True)
     minted = db.Column(db.Boolean, default=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('User', back_populates='memes')
 
     def __repr__(self):
         return str(f'meme-{self.id}')

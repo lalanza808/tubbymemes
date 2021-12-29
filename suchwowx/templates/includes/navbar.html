@@ -18,6 +18,6 @@
     <a class="button is-primary" id="metamaskConnect" onclick="onboardMetaMask();">Connect</a>
   {% endif %}
   {% else %}
-  <a class="button" href="{{ url_for('meme.index') }}" up-target=".container">Go Home</a>
+  <a class="button" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">Go Home</a>
   {% endif %}
 </div>

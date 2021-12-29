@@ -38,7 +38,7 @@ def mod():
     memes = Meme.query.filter(
         Meme.meta_ipfs_hash == None
     ).order_by(Meme.create_date.asc())
-    return render_template('mod.html', memes=memes)
+    return render_template('index.html', memes=memes)
 
 @bp.route('/publish', methods=['GET', 'POST'])
 def publish():
@@ -62,7 +62,6 @@ def publish():
             return '<script>window.history.back()</script>'
         title = request.form.get('title')
         description = request.form.get('description')
-        creator = request.form.get('creator')
         file = request.files["file"]
         filename = "{}{}".format(
             token_urlsafe(24),
@@ -75,7 +74,7 @@ def publish():
                 file_name=filename,
                 title=title,
                 description=description,
-                creator_handle=creator
+                user_id=current_user.id
             )
             db.session.add(meme)
             db.session.commit()

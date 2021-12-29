@@ -30,7 +30,7 @@
             </br>
             <p>Title: <strong>{{ meme.title }}</strong></p>
             <p>Description: <strong>{{ meme.description }}</strong></p>
-            <p>Creator handle: <a href="{{ url_for('user.show', handle=meme.creator_handle) }}" up-follow=".container">{{ meme.creator_handle }}</a></p>
+            <p>Poster Address: <a href="{{ url_for('user.show', handle=meme.user.handle) }}" up-follow=".container">{{ meme.user.handle }}</a></p>
             {% if meme.meta_ipfs_hash %}
             <p>Meta IPFS: <a href="{{ meta_url }}" target=_self up-preload up-follow=".container">{{ meme.meta_ipfs_hash }}</a></p>
             {% endif %}

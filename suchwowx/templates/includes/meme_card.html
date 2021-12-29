@@ -1,0 +1,38 @@
+{# expects meme var #}
+<div class="card">
+  <div class="card-image">
+    <figure class="image">
+      <a href="{{ url_for('meme.show', meme_id=meme.id) }}" up-preload up-follow=".container">
+        {% if meme.file_name.endswith('mp4') %}
+          <video class="img-fluid" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
+            <source src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        {% else %}
+          <img alt="{{ meme.title }}" src="{{ url_for('meta.uploaded_file', filename=meme.file_name) }}" width="200px" class="img-fluid" style="" />
+        {% endif %}
+      </a>
+    </figure>
+  </div>
+  <div class="card-content">
+    <div class="media">
+      <div class="media-left">
+        {% if meme.user.profile_image %}
+        <figure class="image is-48x48">
+          <img src="{{ url_for('meta.uploaded_file', filename=meme.user.profile_image) }}" alt="{{ meme.user.handle }} pfp">
+        </figure>
+        {% endif %}
+      </div>
+      <div class="media-content">
+        <p class="title is-4">{{ meme.user.handle }}</p>
+        <p class="subtitle is-6">{{ meme.user.public_address | shorten_address }}</p>
+      </div>
+    </div>
+
+    <div class="content">
+      {{ meme.description }}
+      <br>
+      <time datetime="2016-1-1">{{ meme.create_date.strftime('%H:%M UTC - %d %b %Y') }}</time>
+    </div>
+  </div>
+</div>

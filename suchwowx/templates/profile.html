@@ -11,14 +11,16 @@
         <div id="screen">
           <div class="screen">
             <p><strong>From Avax Chain</strong></p>
-            <p>Handle: <input type="text" placeholder="{{ user.handle }}" value="{{ user.handle }}"></input>
+            <p>Handle: ?</p>
             <img src="{{ user.get_profile_image() }}" id="profileImage" />
             </br></br>
             <p><strong>From Local Database</strong></p>
+            <p>Handle: <input type="text" placeholder="{{ user.handle }}" value="{{ user.handle }}"></input></p>
             <p>Register Date: <strong>{{ user.register_date }}</strong></p>
             <p>Login Date: <strong>{{ user.last_login_date }}</strong></p>
             <p>Moderator: <strong>{{ user.is_moderator() }}</strong></p>
             <p>Verified: <strong>{{ user.verified }}</strong></p>
+            <p>Memes Posted: <strong>{{ user.memes | length }}</strong></p>
             {% if user.bio %}
             <p>Bio: {{ user.bio }}</p>
             {% endif %}

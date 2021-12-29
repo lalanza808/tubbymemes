@@ -28,9 +28,9 @@ def upload_to_ipfs(meme_id: str):
             'name': meme.title,
             'description': meme.description,
             'image': f'ipfs://{artwork_hash}',
-            'by': meme.creator_handle,
+            'by': meme.user.handle,
             'properties': {
-                'creator': meme.creator_handle
+                'creator': meme.user.handle
             }
         }
         meta_hash = client.add_json(meta)
