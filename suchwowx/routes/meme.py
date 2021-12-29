@@ -1,15 +1,13 @@
 from os import path, remove
 from secrets import token_urlsafe
-from json import loads, dumps
 
 import ipfsApi
-from flask import Blueprint, render_template, request, current_app
-from flask import send_from_directory, redirect, flash, url_for, jsonify
-from flask_login import logout_user, current_user, login_user
-from requests.exceptions import HTTPError
+from flask import Blueprint, render_template, request
+from flask import redirect, flash, url_for
+from flask_login import current_user
 from web3 import Web3
 
-from suchwowx.models import Meme, User
+from suchwowx.models import Meme
 from suchwowx.helpers import upload_to_ipfs
 from suchwowx.factory import db
 from suchwowx import config
@@ -17,9 +15,12 @@ from suchwowx import config
 
 bp = Blueprint('meme', 'meme')
 
+
 @bp.route('/')
 def index():
-    memes = Meme.query.filter(Meme.meta_ipfs_hash != None).order_by(Meme.create_date.desc())
+    memes = Meme.query.filter(
+        Meme.meta_ipfs_hash != None
+    ).order_by(Meme.create_date.desc())
     w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9650'))
     contract_address = w3.toChecksumAddress(config.CONTRACT_ADDRESS)
     contract_abi = config.CONTRACT_ABI
@@ -30,6 +31,7 @@ def index():
     # total_supply = contract.functions.totalSupply().call()
     return render_template('index.html', memes=memes, contract=contract)
 
+
 @bp.route('/mod')
 def mod():
     if not current_user.is_moderator():
@@ -39,6 +41,7 @@ def mod():
         Meme.meta_ipfs_hash == None
     ).order_by(Meme.create_date.asc())
     return render_template('index.html', memes=memes)
+
 
 @bp.route('/publish', methods=['GET', 'POST'])
 def publish():
@@ -83,9 +86,9 @@ def publish():
                 meme.meta_ipfs_hash = res[0]
                 meme.meme_ipfs_hash = res[1]
                 db.session.commit()
-                flash('Published new meme to local database and IPFS.', 'success')
+                flash('Published new meme to local database and IPFS.', 'success') # noqa
             else:
-                flash('Published new meme to database for review by moderators.', 'success')
+                flash('Published new meme to database for review by moderators.', 'success') # noqa
             return redirect(url_for('meme.index'))
         except ConnectionError:
             flash('[!] Unable to connect to local ipfs', 'error')
@@ -95,6 +98,7 @@ def publish():
         'publish.html',
         meme=meme
     )
+
 
 @bp.route('/meme/<meme_id>')
 def show(meme_id):
@@ -108,6 +112,7 @@ def show(meme_id):
         flash('You need to be a moderator to view that meme.', 'warning')
         return redirect(url_for('meme.index'))
     return render_template('meme.html', meme=meme)
+
 
 @bp.route('/meme/<meme_id>/<action>')
 def approve(meme_id, action):
@@ -129,10 +134,14 @@ def approve(meme_id, action):
         if not res:
             flash('Unable to post to IPFS, daemon may be offline.', 'error')
             return redirect(url_for('meme.show', meme_id=meme.id))
-        existing_meta_ipfs = Meme.query.filter(Meme.meta_ipfs_hash == res[0]).first()
-        existing_meme_ipfs = Meme.query.filter(Meme.meme_ipfs_hash == res[1]).first()
+        existing_meta_ipfs = Meme.query.filter(
+            Meme.meta_ipfs_hash == res[0]
+        ).first()
+        existing_meme_ipfs = Meme.query.filter(
+            Meme.meme_ipfs_hash == res[1]
+        ).first()
         if existing_meta_ipfs or existing_meme_ipfs:
-            flash('Cannot use an existing IPFS hash for either metadata or memes.', 'warning')
+            flash('Cannot use an existing IPFS hash for either metadata or memes.', 'warning') # noqa
             return redirect(url_for('meme.show', meme_id=meme.id))
         meme.meta_ipfs_hash = res[0]
         meme.meme_ipfs_hash = res[1]

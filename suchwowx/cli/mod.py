@@ -7,6 +7,7 @@ from suchwowx.factory import db
 
 bp = Blueprint('mod', 'mod')
 
+
 @bp.cli.command('list')
 def list():
     """
@@ -14,6 +15,7 @@ def list():
     """
     for mod in Moderator.query.all():
         click.echo(mod.user.handle)
+
 
 @bp.cli.command('add')
 @click.argument('moderator_handle')
@@ -32,6 +34,7 @@ def add(moderator_handle):
     else:
         click.echo('[.] That is not a valid user.')
 
+
 @bp.cli.command('remove')
 @click.argument('moderator_handle')
 def remove(moderator_handle):
@@ -44,8 +47,8 @@ def remove(moderator_handle):
         if mod:
             db.session.delete(mod)
             db.session.commit()
-            click.echo(f'[-] Removed moderator status from `{moderator_handle}`')
+            click.echo(f'[-] Removed moderator status from `{moderator_handle}`') # noqa
         else:
-            click.echo(f'[.] That user is not a moderator.')
+            click.echo('[.] That user is not a moderator.')
     else:
         click.echo('[.] That is not a valid user.')

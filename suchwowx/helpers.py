@@ -2,7 +2,7 @@ import ipfsApi
 from eth_account.messages import encode_defunct
 
 from suchwowx.models import Meme
-from suchwowx.factory import w3, db
+from suchwowx.factory import w3
 from suchwowx import config
 
 
@@ -13,6 +13,7 @@ def verify_signature(message, signature, public_address):
         return True
     else:
         return False
+
 
 def upload_to_ipfs(meme_id: str):
     meme = Meme.query.get(meme_id)
@@ -37,4 +38,5 @@ def upload_to_ipfs(meme_id: str):
         print(f'[+] Uploaded metadata to IPFS: {meta_hash}')
         return (meta_hash, artwork_hash)
     except Exception as e:
+        print(f'[!] Error: {e}')
         return False

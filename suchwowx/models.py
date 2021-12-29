@@ -1,6 +1,7 @@
 from uuid import uuid4
 from datetime import datetime
 
+from flask import url_for
 from flask_login import login_user
 
 from suchwowx.factory import db
@@ -9,6 +10,7 @@ from suchwowx import config
 
 def rand_id():
     return uuid4().hex
+
 
 class Moderator(db.Model):
     __tablename__ = 'moderators'
@@ -19,6 +21,7 @@ class Moderator(db.Model):
 
     def __rep__(self):
         return self.user.handle
+
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -65,7 +68,7 @@ class User(db.Model):
     def get_profile_image(self, full=True):
         if self.profile_image:
             if full:
-                return url_for('meta.uploaded_file', filename=self.profile_image)
+                return url_for('meta.uploaded_file', filename=self.profile_image) # noqa
             else:
                 return self.profile_image
         else:

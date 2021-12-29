@@ -4,11 +4,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # App
-SECRET_KEY = getenv('SECRET_KEY', 'yyyyyyyyyyyyy')            # whatever you want it to be
-DATA_FOLDER = getenv('DATA_FOLDER', '/path/to/uploads')       # some stable storage path
-SERVER_NAME = getenv('SERVER_NAME', '127.0.0.1:5000')         # name of your DNS resolvable site (.com)
-IPFS_SERVER = getenv('IPFS_SERVER', 'http://127.0.0.1:8080')  # ip/endpoint of ipfs explorer
-MOD_MODE = getenv('MOD_MODE', 1)                              # mod mode enabled by default (enforce queue)
+SECRET_KEY = getenv('SECRET_KEY', 'yyyyyyyyyyyyy')
+DATA_FOLDER = getenv('DATA_FOLDER', '/path/to/uploads')
+SERVER_NAME = getenv('SERVER_NAME', '127.0.0.1:5000')
+IPFS_SERVER = getenv('IPFS_SERVER', 'http://127.0.0.1:8080')
 
 # Cache
 CACHE_HOST = getenv('CACHE_HOST', 'localhost')
@@ -21,7 +20,7 @@ MAX_CONTENT_LENGTH = 32 * 1024 * 1024
 TEMPLATES_AUTO_RELOAD = getenv('TEMPLATES_AUTO_RELOAD', True)
 
 # Contract
-CONTRACT_ADDRESS = '0xBAb68B24068D21Fa862908818054c7e4d921db5A' # rinkeby ETH
+CONTRACT_ADDRESS = '0xBAb68B24068D21Fa862908818054c7e4d921db5A'  # rinkeby ETH
 CONTRACT_ABI = [
   {
     "inputs": [],

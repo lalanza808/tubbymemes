@@ -7,6 +7,7 @@ from suchwowx import config
 
 bp = Blueprint('meta', 'meta')
 
+
 @bp.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     """
@@ -14,9 +15,11 @@ def uploaded_file(filename):
     """
     return send_from_directory(f'{config.DATA_FOLDER}/uploads', filename)
 
+
 @bp.route('/about')
 def about():
     return render_template('about.html')
+
 
 @bp.route('/disconnect')
 def disconnect():

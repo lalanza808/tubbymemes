@@ -1,6 +1,6 @@
 from secrets import token_urlsafe
 
-from flask import Blueprint, request, jsonify, url_for
+from flask import Blueprint, request, jsonify
 from flask_login import current_user
 
 from suchwowx.factory import db
@@ -9,6 +9,7 @@ from suchwowx.models import User
 
 
 bp = Blueprint('api', 'api', url_prefix='/api/v1')
+
 
 @bp.route('/user_exists')
 def user_exists():
@@ -39,6 +40,7 @@ def user_exists():
         'success': True
     })
 
+
 @bp.route('/authenticate/metamask', methods=['POST'])
 def authenticate_metamask():
     """
@@ -63,7 +65,7 @@ def authenticate_metamask():
 
     if _u:
         if data['message'].endswith(_u.nonce):
-            if verify_signature(data['message'], data['signed_data'], data['public_address']):
+            if verify_signature(data['message'], data['signed_data'], data['public_address']): # noqa
                 _u.login()
                 return jsonify({
                     'success': True,

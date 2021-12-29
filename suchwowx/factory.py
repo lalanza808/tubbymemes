@@ -10,14 +10,15 @@ from suchwowx import config
 
 
 db = SQLAlchemy()
-w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9650')) # todo
+w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9650')) # noqa
 
 
-def setup_db(app: Flask, db:SQLAlchemy=db):
+def setup_db(app: Flask, db: SQLAlchemy = db):
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{config.DATA_FOLDER}/sqlite.db' # noqa
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
     return db
+
 
 def create_app_huey():
     app = Flask(__name__)
@@ -25,6 +26,7 @@ def create_app_huey():
     dictConfig(config.LOGGING_CONFIG)
     setup_db(app, db)
     return app
+
 
 def create_app():
     app = Flask(__name__)
@@ -42,7 +44,7 @@ def create_app():
         return user
 
     with app.app_context():
-        from suchwowx import filters, cli
+        from suchwowx import filters
         from suchwowx.routes import api, meme, meta, user
         from suchwowx.cli import mod, cli
         app.register_blueprint(filters.bp)
