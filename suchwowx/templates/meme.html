@@ -27,7 +27,7 @@
             {% else %}
               <img src="{{ meme_url }}" id="memeImage" />
             {% endif %}
-            </br>
+            <br/>
             <p>Title: <strong>{{ meme.title }}</strong></p>
             <p>Description: <strong>{{ meme.description }}</strong></p>
             <p>Poster Address: <a href="{{ url_for('user.show', handle=meme.user.handle) }}">{{ meme.user.handle }}</a></p>
@@ -39,7 +39,7 @@
             {% endif %}
             <p>Meme ID: <code>{{ meme }}</code></p>
             {% if not meme.meta_ipfs_hash %}
-            </br>
+            <br/>
             <div class="columns">
               <div class="column">
                 <a class="button is-info is-12 column" href="{{ url_for('meme.approve', meme_id=meme.id, action='approve') }}">Approve</a>
@@ -47,6 +47,25 @@
               <div class="column">
                 <a class="button is-danger is-12 column" href="{{ url_for('meme.approve', meme_id=meme.id, action='deny') }}">Deny</a>
               </div>
+            </div>
+            {% else %}
+            <br/>
+            <div class="columns">
+              {% if meme.minted %}
+                <div class="column">
+                  <a class="button is-info is-12 column">Tip AVAX</a>
+                </div>
+                <div class="column">
+                  <a class="button is-info is-12 column">Tip WOWX</a>
+                </div>
+                <div class="column">
+                  <a class="button is-info is-12 column">Tip WOW</a>
+                </div>
+              {% else %}
+                <div class="column">
+                  <a class="button is-danger is-12 column" onclick="mint()">Mint</a>
+                </div>
+              {% endif %}
             </div>
             {% endif %}
           </div>
@@ -56,5 +75,43 @@
     </div>
   </section>
   {% include 'includes/footer.html' %}
+  {% include 'includes/web3.html' %}
+  <script type="text/javascript">
+    async function isMinted() {
+      const ipfsHash = '{{ meme.meta_ipfs_hash }}';
+      if (ipfsHash != '') {
+        const tokenId = await contract.methods.metadataTokenId(ipfsHash).call();
+        console.log(tokenId);
+        return
+      }
+      // if (userProfile.userHandle){document.getElementById('userHandle').innerHTML = userProfile.userHandle};
+      // if (userProfile.wowneroAddress){document.getElementById('wowneroAddress').innerHTML = userProfile.wowneroAddress};
+      // if (userProfile.metadataIPFSHash){document.getElementById('metadataIPFSHash').innerHTML = userProfile.metadataIPFSHash};
+      // if (userProfile.tippedAVAX){document.getElementById('tippedAVAX').innerHTML = userProfile.tippedAVAX};
+      // document.getElementById('tippedWOWX').innerHTML = 0;
+      // return
+    }
+    
+    async function mint() {
+      const walletAddress = await getMetamaskAccount();
+      const gasPrice = await w3.eth.getGasPrice();
+      const gasLimit = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").estimateGas({from: walletAddress}, function(err, gas){
+        return gas;
+      });
+      try {
+        notif(`Minting meme "{{ meme.id }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" to the Avalanche blockchain.`, 'info');
+        let res = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").send({
+          from: walletAddress,
+          value: 0,
+          gasPrice: gasPrice,
+          gas: gasLimit
+        });
+        console.log(res);
+        window.location.href = "";
+      } catch(e) {
+        notif(e.message, 'warning');
+      }
+    }
+  </script>
   </body>
 </html>
