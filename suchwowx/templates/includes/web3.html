@@ -2,7 +2,7 @@
 <script type="text/javascript">
   let contractABI = {{ config.CONTRACT_ABI | tojson }};
   let contractAddress = "{{ config.CONTRACT_ADDRESS }}";
-  const w3 = new Web3(Web3.givenProvider || "http://127.0.0.1:7545");
+  const w3 = new Web3(Web3.givenProvider);
   const contract = new w3.eth.Contract(contractABI, contractAddress);
 
   async function getMetamaskAccount() {
@@ -11,5 +11,25 @@
     });
     const account = accounts[0];
     return account
+  }
+
+  async function getTokenID(ipfsHash) {
+    if (ipfsHash != '') {
+      const tokenId = await contract.methods.metadataTokenId(ipfsHash).call();
+      return tokenId;
+    }
+  }
+
+  async function isMinted(ipfsHash) {
+    if (ipfsHash != '') {
+      const tokenId = await getTokenID(ipfsHash)
+      if (tokenId == 0) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false
+    }
   }
 </script>

@@ -38,7 +38,19 @@
             <p>Meme IPFS: <a href="{{ meme_url }}" target=_self up-preload up-follow=".container">{{ meme.meme_ipfs_hash }}</a></p>
             {% endif %}
             <p>Meme ID: <code>{{ meme }}</code></p>
-            {% if not meme.meta_ipfs_hash %}
+            <div id="profileModal" class="modal">
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head">
+                  <p class="modal-card-title">Modal title</p>
+                  <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                  <p style="word-wrap: break-word;">Wownero Address: {{ meme.user.wownero_address }}</p>
+                </section>
+              </div>
+            </div>
+            {% if not meme.approved %}
             <br/>
             <div class="columns">
               <div class="column">
@@ -50,23 +62,22 @@
             </div>
             {% else %}
             <br/>
-            <div class="columns">
-              {% if meme.minted %}
+              <div id="tipButtons" class="columns" style="display:none;">
                 <div class="column">
-                  <a class="button is-info is-12 column">Tip AVAX</a>
+                  <a class="button is-info is-12 column" onclick="tipAVAX()">Tip AVAX</a>
                 </div>
                 <div class="column">
-                  <a class="button is-info is-12 column">Tip WOWX</a>
+                  <a class="button is-info is-12 column" onclick="tipWOWX()">Tip WOWX</a>
                 </div>
                 <div class="column">
-                  <a class="button is-info is-12 column">Tip WOW</a>
+                  <a class="button is-info is-12 column" onclick="tipWOW()">Tip WOW</a>
                 </div>
-              {% else %}
+              </div>
+              <div id="mintButton" class="columns" style="display:none;">
                 <div class="column">
                   <a class="button is-danger is-12 column" onclick="mint()">Mint</a>
                 </div>
-              {% endif %}
-            </div>
+              </div>
             {% endif %}
           </div>
         </div>
@@ -75,31 +86,53 @@
     </div>
   </section>
   {% include 'includes/footer.html' %}
+  {% if meme.approved %}
   {% include 'includes/web3.html' %}
   <script type="text/javascript">
-    async function isMinted() {
-      const ipfsHash = '{{ meme.meta_ipfs_hash }}';
-      if (ipfsHash != '') {
-        const tokenId = await contract.methods.metadataTokenId(ipfsHash).call();
-        console.log(tokenId);
+    window.addEventListener('DOMContentLoaded', async () => {
+      let minted = await isMinted('{{ meme.meta_ipfs_hash }}');
+      if (minted) {
+        document.getElementById('tipButtons').style.display = "flex";
+      } else {
+        document.getElementById('mintButton').style.display = "flex";
+      }
+    });
+
+    async function tipAVAX() {
+      const tokenId = await getTokenID('{{ meme.meta_ipfs_hash }}');
+      const walletAddress = await getMetamaskAccount();
+      const gasPrice = await w3.eth.getGasPrice();
+      const gasLimit = await contract.methods.tipAVAX(tokenId).estimateGas({from: walletAddress}, function(err, gas){
+        return gas;
+      });
+
+      try {
+        notif(`Tipping meme "{{ meme.id | shorten_address }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" to the Avalanche blockchain.`, 'info');
+        let res = await contract.methods.tipAVAX(tokenId).send({
+          from: walletAddress,
+          value: 1000000000000000,
+          gasPrice: gasPrice,
+          gas: gasLimit
+        });
+        console.log(res);
+        window.location.href = "";
+      } catch(e) {
+        notif(e.message, 'warning');
+      }
+    }
+
+    async function mint() {
+      if (await isMinted('{{ meme.meta_ipfs_hash }}')) {
+        notif('Already minted!', 'warning');
         return
       }
-      // if (userProfile.userHandle){document.getElementById('userHandle').innerHTML = userProfile.userHandle};
-      // if (userProfile.wowneroAddress){document.getElementById('wowneroAddress').innerHTML = userProfile.wowneroAddress};
-      // if (userProfile.metadataIPFSHash){document.getElementById('metadataIPFSHash').innerHTML = userProfile.metadataIPFSHash};
-      // if (userProfile.tippedAVAX){document.getElementById('tippedAVAX').innerHTML = userProfile.tippedAVAX};
-      // document.getElementById('tippedWOWX').innerHTML = 0;
-      // return
-    }
-    
-    async function mint() {
       const walletAddress = await getMetamaskAccount();
       const gasPrice = await w3.eth.getGasPrice();
       const gasLimit = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").estimateGas({from: walletAddress}, function(err, gas){
         return gas;
       });
       try {
-        notif(`Minting meme "{{ meme.id }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" to the Avalanche blockchain.`, 'info');
+        notif(`Minting meme "{{ meme.id | shorten_address }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" to the Avalanche blockchain.`, 'info');
         let res = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").send({
           from: walletAddress,
           value: 0,
@@ -113,5 +146,6 @@
       }
     }
   </script>
+  {% endif %}
   </body>
 </html>

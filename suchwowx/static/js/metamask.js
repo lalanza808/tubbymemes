@@ -19,7 +19,6 @@ async function onboardMetaMask(){
 
   const connectButton = async () => {
     if (!MetaMaskOnboarding.isMetaMaskInstalled()) {
-      onboardButton.innerText = 'Click here to install MetaMask!';
       onboardButton.onclick = () => {
         onboardButton.classList.add('is-loading');
         onboardButton.disabled = true;
