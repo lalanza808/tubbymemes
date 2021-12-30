@@ -26,24 +26,35 @@
               </br></br>
               <p><strong>From Local Database</strong></p>
               <p>
-                Handle: <input id="handleInput" type="text" placeholder="{{ user.handle }}" value="{{ user.handle }}"></input>
+                Handle:
                 {% if is_user %}
+                  <input id="handleInput" type="text" placeholder="{{ user.handle }}" value="{{ user.handle }}"></input>
                   <a onclick="publishHandleAVAX()" class="publishAVAX">Publish AVAX</a>
+                {% else %}
+                  <strong>{{ user.handle }}</strong>
                 {% endif %}
               </p>
               <p>
-                Wownero Address: <input id="wowneroAddressInput" type="text" placeholder="{{ user.wownero_address }}" value="{{ user.wownero_address }}"></input>
+                Wownero Address:
                 {% if is_user %}
+                  <input id="wowneroAddressInput" type="text" placeholder="{{ user.wownero_address }}" value="{{ user.wownero_address }}"></input>
                   <a onclick="publishWowneroAddress()" class="publishAVAX">Publish AVAX</a>
+                {% else %}
+                  <strong>{{ user.wownero_address }}</strong>
                 {% endif %}
               </p>
               <p>
-                Metadata IPFS Hash: <input id="metadataIPFSHashInput" type="text" placeholder="{{ user.ipfs_hash }}" value="{{ user.ipfs_hash }}"></input>
+                Metadata IPFS Hash:
                 {% if is_user %}
+                  <input id="metadataIPFSHashInput" type="text" placeholder="{{ user.ipfs_hash }}" value="{{ user.ipfs_hash }}"></input>
                   <a onclick="publishMetadataIPFSHash()" class="publishAVAX">Publish AVAX</a>
+                {% else %}
+                  <strong>{{ user.ipfs_hash }}</strong>
                 {% endif %}
               </p>
+              {% if is_user %}
               <p><a onclick="saveDB()" class="ml-2 button is-primary">Save DB</a></p>
+              {% endif %}
               <p>Register Date: <strong>{{ user.register_date }}</strong></p>
               <p>Login Date: <strong>{{ user.last_login_date }}</strong></p>
               <p>Moderator: <strong>{{ user.is_moderator() }}</strong></p>

@@ -24,8 +24,8 @@
         {% endif %}
       </div>
       <div class="media-content">
-        <p class="title is-4">{{ meme.user.handle }}</p>
-        <p class="subtitle is-6">{{ meme.user.public_address | shorten_address }}</p>
+        <p class="title is-4"><a href="{{ url_for('user.show', handle=meme.user.handle) }}">{{ meme.user.handle }}</a></p>
+        <p class="subtitle is-6"><a href="{{ meme.user.public_address | show_snowtrace }}" target="_blank">{{ meme.user.public_address | shorten_address }}</a></p>
       </div>
     </div>
 

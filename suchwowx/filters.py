@@ -1,6 +1,8 @@
 from flask import Blueprint
 from arrow import get as arrow_get
 
+from suchwowx import config
+
 
 bp = Blueprint('filters', 'filters')
 
@@ -15,3 +17,13 @@ def shorten_address(a):
 @bp.app_template_filter('humanize')
 def humanize(d):
     return arrow_get(d).humanize()
+
+@bp.app_template_filter()
+def show_snowtrace(s) -> str:
+    """
+    Return proper links to Etherscan based upon the currently configured network.
+    """
+    if config.CONTRACT_TESTNET:
+        return f'https://testnet.snowtrace.io/search?f=0&q={s}'
+    else:
+        return f'https://snowtrace.io/search?f=0&q={s}'
