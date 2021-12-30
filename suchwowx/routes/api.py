@@ -41,6 +41,40 @@ def user_exists():
     })
 
 
+@bp.route('/update/user', methods=['POST'])
+def update_user():
+    if not current_user.is_authenticated:
+        return jsonify({
+            'success': False,
+            'message': 'Must be authenticated in order to update.'
+        })
+
+    data = request.get_json()
+    _u = User.query.get(int(data['user_id']))
+
+    if _u:
+        if current_user.id == _u.id:
+            _u.wownero_address = data['wownero_address']
+            _u.ipfs_hash = data['ipfs_hash']
+            _u.handle = data['handle']
+            db.session.commit()
+            return jsonify({
+                'success': True,
+                'message': 'Updated user record.'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Cannot edit another record.'
+            })
+
+    else:
+        return jsonify({
+            'success': False,
+            'message': 'User does not exist.'
+        })
+
+
 @bp.route('/authenticate/metamask', methods=['POST'])
 def authenticate_metamask():
     """

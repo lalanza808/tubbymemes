@@ -36,6 +36,8 @@ class User(db.Model):
     handle = db.Column(db.String(40), unique=True)
     bio = db.Column(db.String(600), nullable=True)
     profile_image = db.Column(db.String(300), nullable=True)
+    ipfs_hash = db.Column(db.String(100), nullable=True)
+    wownero_address = db.Column(db.String(120), nullable=True)
     website_url = db.Column(db.String(120), nullable=True)
     moderator = db.relationship('Moderator', back_populates='user')
     memes = db.relationship('Meme', back_populates='user')

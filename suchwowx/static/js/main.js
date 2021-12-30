@@ -7,6 +7,17 @@ async function getSignedData(publicAddress, jsonData) {
   return signedData
 }
 
+async function notif(s, t) {
+  new Noty({
+    type: t,
+    theme: 'relax',
+    layout: 'topCenter',
+    text: s,
+    timeout: 4500
+  }).show();
+  return
+}
+
 async function confirmAvalanche(){
   let debug = true;
   let chainId;
