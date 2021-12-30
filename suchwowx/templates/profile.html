@@ -15,13 +15,13 @@
               <img src="{{ user.get_profile_image() }}" id="profileImage" />
             </div>
             <div class="column is-full">
-              <p><strong>From Avax Chain</strong></p>
-              <p>Handle: <span id="userHandle" class="mr-4">?</span></p>
-              <p>Wownero Address: <span id="wowneroAddress" class="mr-4">?</span></p>
-              <p>Profile IPFS Hash: <span id="metadataIPFSHash">?</span></p>
-              <p>Tipped AVAX: <span id="tippedAVAX">?</span></p>
-              <p>Tipped WOWX: <span id="tippedWOWX">?</span></p>
-              <p>Tipped WOW: <span id="tippedWOW">?</span></p>
+              <p><strong>From Avalanche Blockchain</strong></p>
+              <p>Handle: <strong><span id="userHandle" class="mr-4">?</span></strong></p>
+              <p>Wownero Address: <strong><span id="wowneroAddress" class="mr-4 wrap">?</span></strong></p>
+              <p>Profile IPFS Hash: <strong><span id="metadataIPFSHash">?</span></strong></p>
+              <p>Tipped AVAX: <strong><span id="tippedAVAX">?</span></strong></p>
+              <p>Tipped WOWX: <strong><span id="tippedWOWX">?</span></strong></p>
+              <p>Tipped WOW: <strong><span id="tippedWOW">?</span></strong></p>
 
               </br></br>
               <p><strong>From Local Database</strong></p>
@@ -37,26 +37,23 @@
               <p>
                 Wownero Address:
                 {% if is_user %}
-                  <input id="wowneroAddressInput" type="text" placeholder="{{ user.wownero_address }}" value="{{ user.wownero_address }}"></input>
+                  <input id="wowneroAddressInput" type="text" placeholder="{{ user.wownero_address or '' }}" value="{{ user.wownero_address or '' }}"></input>
                   <a onclick="publishWowneroAddress()" class="publishAVAX">Publish AVAX</a>
                 {% else %}
-                  <strong>{{ user.wownero_address }}</strong>
+                  <strong><span class="wrap">{{ user.wownero_address }}</span></strong>
                 {% endif %}
               </p>
               <p>
                 Metadata IPFS Hash:
                 {% if is_user %}
-                  <input id="metadataIPFSHashInput" type="text" placeholder="{{ user.ipfs_hash }}" value="{{ user.ipfs_hash }}"></input>
+                  <input id="metadataIPFSHashInput" type="text" placeholder="{{ user.ipfs_hash or '' }}" value="{{ user.ipfs_hash or '' }}"></input>
                   <a onclick="publishMetadataIPFSHash()" class="publishAVAX">Publish AVAX</a>
                 {% else %}
                   <strong>{{ user.ipfs_hash }}</strong>
                 {% endif %}
               </p>
-              {% if is_user %}
-              <p><a onclick="saveDB()" class="ml-2 button is-primary">Save DB</a></p>
-              {% endif %}
               <p>Register Date: <strong>{{ user.register_date }}</strong></p>
-              <p>Login Date: <strong>{{ user.last_login_date }}</strong></p>
+              <p>Last Login Date: <strong>{{ user.last_login_date }}</strong></p>
               <p>Moderator: <strong>{{ user.is_moderator() }}</strong></p>
               <p>Verified: <strong>{{ user.verified }}</strong></p>
               <p>Memes Posted: <strong>{{ user.memes | length }}</strong></p>
@@ -65,6 +62,9 @@
               {% endif %}
               {% if user.website %}
               <p>Website: <a href="{{ user.website_url }}" target="_blank">{{ user.website_url }}</a></p>
+              {% endif %}
+              {% if is_user %}
+              <p></br><a onclick="saveDB()" class="ml-2 button is-primary">Save DB</a></p>
               {% endif %}
             </div>
         </div>
@@ -109,7 +109,7 @@
               notif('Updated user information in this server\'s database', 'success');
               notif('Publish to AVAX to make the data more available', 'info');
             } else {
-              notif('There was an issue posting data to the API. Try again later.', 'error');
+              notif(data['message'], 'error');
             }
         })
     }
@@ -118,10 +118,10 @@
     async function fetchUserProfile() {
       _walletAddress = w3.utils.toChecksumAddress('{{ user.public_address }}');
       const userProfile = await contract.methods.userProfile(_walletAddress).call();
-      document.getElementById('userHandle').innerHTML = userProfile.userHandle;
-      document.getElementById('wowneroAddress').innerHTML = userProfile.wowneroAddress;
-      document.getElementById('metadataIPFSHash').innerHTML = userProfile.metadataIPFSHash;
-      document.getElementById('tippedAVAX').innerHTML = userProfile.tippedAVAX;
+      if (userProfile.userHandle){document.getElementById('userHandle').innerHTML = userProfile.userHandle};
+      if (userProfile.wowneroAddress){document.getElementById('wowneroAddress').innerHTML = userProfile.wowneroAddress};
+      if (userProfile.metadataIPFSHash){document.getElementById('metadataIPFSHash').innerHTML = userProfile.metadataIPFSHash};
+      if (userProfile.tippedAVAX){document.getElementById('tippedAVAX').innerHTML = userProfile.tippedAVAX};
       document.getElementById('tippedWOWX').innerHTML = 0;
       return
     }
@@ -136,14 +136,19 @@
       const gasLimit = await contract.methods.setUserHandle(handle).estimateGas(function(err, gas){
         return gas;
       });
-      console.log(`Attempting to update user handle ${handle} with gas limit of ${gasLimit} gas and gas price of ${gasPrice}`);
-      let res = await contract.methods.setUserHandle(handle).send({
-        from: walletAddress,
-        value: 0,
-        gasPrice: gasPrice,
-        gas: gasLimit
-      });
-      console.log(res);
+      try {
+        notif(`Publishing user handle "${handle}" to the Avalanche blockchain.`, 'info');
+        let res = await contract.methods.setUserHandle(handle).send({
+          from: walletAddress,
+          value: 0,
+          gasPrice: gasPrice,
+          gas: gasLimit
+        });
+        console.log(res);
+        window.location.href = "";
+      } catch(e) {
+        notif(e.message, 'warning');
+      }
     }
 
     async function publishWowneroAddress() {
@@ -156,14 +161,19 @@
       const gasLimit = await contract.methods.setUserWowneroAddress(address).estimateGas(function(err, gas){
         return gas;
       });
-      console.log(`Attempting to update Wownero address ${address} with gas limit of ${gasLimit} gas and gas price of ${gasPrice}`);
-      let res = await contract.methods.setUserWowneroAddress(address).send({
-        from: walletAddress,
-        value: 0,
-        gasPrice: gasPrice,
-        gas: gasLimit
-      });
-      console.log(res);
+      try {
+        notif(`Publishing Wownero address "${address.slice(0, 6)}...${address.slice(-6)}" to the Avalanche blockchain.`, 'info');
+        let res = await contract.methods.setUserWowneroAddress(address).send({
+          from: walletAddress,
+          value: 0,
+          gasPrice: gasPrice,
+          gas: gasLimit
+        });
+        console.log(res);
+        window.location.href = "";
+      } catch(e) {
+        notif(e.message, 'warning');
+      }
     }
 
     async function publishMetadataIPFSHash() {
@@ -176,14 +186,19 @@
       const gasLimit = await contract.methods.setUserMetadata(_hash).estimateGas(function(err, gas){
         return gas;
       });
-      console.log(`Attempting to update user metadata hash ${_hash} with gas limit of ${gasLimit} gas and gas price of ${gasPrice}`);
-      let res = await contract.methods.setUserMetadata(_hash).send({
-        from: walletAddress,
-        value: 0,
-        gasPrice: gasPrice,
-        gas: gasLimit
-      });
-      console.log(res);
+      try {
+        notif(`Publishing user profile metadata IPFS hash ${_hash} to the Avalanche network.`, 'info');
+        let res = await contract.methods.setUserMetadata(_hash).send({
+          from: walletAddress,
+          value: 0,
+          gasPrice: gasPrice,
+          gas: gasLimit
+        });
+        console.log(res);
+        window.location.href = "";
+      } catch(e) {
+        notif(e.message, 'warning');
+      }
     }
 
     window.addEventListener('DOMContentLoaded', () => {

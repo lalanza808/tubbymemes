@@ -27,12 +27,12 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    register_date = db.Column(db.DateTime, default=datetime.utcnow())
+    register_date = db.Column(db.DateTime, default=datetime.utcnow)
     last_login_date = db.Column(db.DateTime, nullable=True)
     verified = db.Column(db.Boolean, default=False)
     public_address = db.Column(db.String(180))
     nonce = db.Column(db.String(180), default=rand_id())
-    nonce_date = db.Column(db.DateTime, default=datetime.utcnow())
+    nonce_date = db.Column(db.DateTime, default=datetime.utcnow)
     handle = db.Column(db.String(40), unique=True)
     bio = db.Column(db.String(600), nullable=True)
     profile_image = db.Column(db.String(300), nullable=True)
@@ -95,7 +95,7 @@ class Meme(db.Model):
     __tablename__ = 'memes'
 
     id = db.Column(db.String(80), default=rand_id, primary_key=True)
-    create_date = db.Column(db.DateTime, default=datetime.utcnow())
+    create_date = db.Column(db.DateTime, default=datetime.utcnow)
     file_name = db.Column(db.String(200), unique=True)
     meta_ipfs_hash = db.Column(db.String(100), unique=True, nullable=True)
     meme_ipfs_hash = db.Column(db.String(100), unique=True, nullable=True)

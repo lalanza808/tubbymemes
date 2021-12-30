@@ -54,6 +54,14 @@ def update_user():
 
     if _u:
         if current_user.id == _u.id:
+            user_exists = User.query.filter(
+                User.handle == data['handle']
+            ).first()
+            if user_exists and not current_user.id == user_exists.id:
+                return jsonify({
+                    'success': False,
+                    'message': 'That user handle already exists on this server'
+                })
             _u.wownero_address = data['wownero_address']
             _u.ipfs_hash = data['ipfs_hash']
             _u.handle = data['handle']
