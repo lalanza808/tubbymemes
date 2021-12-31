@@ -33,5 +33,7 @@ run-avax:
 run-avax-test:
 	./avalanchego-v1.7.3/avalanchego --network-id fuji
 
+sync-avax:
+	./manage.sh sync-avax
 kill:
 	pkill -e -f suchwowx
