@@ -85,6 +85,7 @@ def publish():
                 res = upload_to_ipfs(meme.id)
                 meme.meta_ipfs_hash = res[0]
                 meme.meme_ipfs_hash = res[1]
+                meme.approved = True
                 db.session.commit()
                 flash('Published new meme to local database and IPFS.', 'success') # noqa
             else:
