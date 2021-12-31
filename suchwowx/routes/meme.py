@@ -21,15 +21,7 @@ def index():
     memes = Meme.query.filter(
         Meme.approved == True
     ).order_by(Meme.create_date.desc())
-    w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9650'))
-    contract_address = w3.toChecksumAddress(config.CONTRACT_ADDRESS)
-    contract_abi = config.CONTRACT_ABI
-    contract = w3.eth.contract(
-        address=contract_address,
-        abi=contract_abi
-    )
-    # total_supply = contract.functions.totalSupply().call()
-    return render_template('index.html', memes=memes, contract=contract)
+    return render_template('index.html', memes=memes)
 
 
 @bp.route('/mod')

@@ -10,7 +10,7 @@ from suchwowx import config
 
 
 db = SQLAlchemy()
-w3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9650')) # noqa
+w3 = Web3(Web3.HTTPProvider(config.AVAX_RPC))
 
 
 def setup_db(app: Flask, db: SQLAlchemy = db):

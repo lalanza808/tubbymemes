@@ -6,6 +6,19 @@ from suchwowx.factory import w3
 from suchwowx import config
 
 
+def get_eth_contract():
+    """
+    Return a web3 contract object with the currently
+    deployed SuchWowX smart contract.
+    """
+    contract_abi = config.CONTRACT_ABI
+    contract_address = w3.toChecksumAddress(config.CONTRACT_ADDRESS)
+    return w3.eth.contract(
+        address=contract_address,
+        abi=contract_abi
+    )
+
+
 def verify_signature(message, signature, public_address):
     msg = encode_defunct(text=message)
     recovered = w3.eth.account.recover_message(msg, signature=signature)

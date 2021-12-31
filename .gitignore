@@ -132,9 +132,6 @@ dmypy.json
 data/
 go-ipfs/
 avalanchego-v1.7.3
-*jpg
-*png
-*svg
 *mp4
 *webp
 *mkv

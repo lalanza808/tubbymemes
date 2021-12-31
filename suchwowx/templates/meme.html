@@ -19,6 +19,7 @@
 
         <div id="screen">
           <div class="screen">
+            {% if meme.file_name %}
             {% if meme.file_name.endswith('mp4') %}
               <video style="max-height: 60vh!important;max-width:100%;" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>
                 <source src="{{ meme_url }}" type="video/mp4">
@@ -27,10 +28,14 @@
             {% else %}
               <img src="{{ meme_url }}" id="memeImage" />
             {% endif %}
+            {% endif %}
             <br/>
             <p>Title: <strong>{{ meme.title }}</strong></p>
             <p>Description: <strong>{{ meme.description }}</strong></p>
             <p>Poster Address: <a href="{{ url_for('user.show', handle=meme.user.handle) }}">{{ meme.user.handle }}</a></p>
+            {% if meme.user.wownero_address %}
+            <p>Wownero Address: <strong><span style="word-wrap: break-word">{{ meme.user.wownero_address }}</strong></p>
+            {% endif %}
             {% if meme.meta_ipfs_hash %}
             <p>Meta IPFS: <a href="{{ meta_url }}" target=_self up-preload up-follow=".container">{{ meme.meta_ipfs_hash }}</a></p>
             {% endif %}
@@ -42,12 +47,14 @@
               <div class="modal-background"></div>
               <div class="modal-card">
                 <header class="modal-card-head">
-                  <p class="modal-card-title">Modal title</p>
-                  <button class="delete" aria-label="close"></button>
+                  <p class="modal-card-title">Tip meme in WOW</p>
+                  <button class="delete" aria-label="close" onclick="closeModal('profileModal')" id="closeModal"></button>
                 </header>
                 <section class="modal-card-body">
-                  <p style="word-wrap: break-word;">Wownero Address: {{ meme.user.wownero_address }}</p>
+                  <p style="word-wrap: break-word;">Wownero Address: <span id="wowneroAddress">{{ meme.user.wownero_address | default('?') }}</span></p>
                 </section>
+                <footer class="modal-card-foot">
+                </footer>
               </div>
             </div>
             {% if not meme.approved %}
@@ -63,19 +70,19 @@
             {% else %}
             <br/>
               <div id="tipButtons" class="columns" style="display:none;">
-                <div class="column">
+                <!-- <div class="column">
                   <a class="button is-info is-12 column" onclick="tipAVAX()">Tip AVAX</a>
                 </div>
                 <div class="column">
                   <a class="button is-info is-12 column" onclick="tipWOWX()">Tip WOWX</a>
-                </div>
+                </div> -->
                 <div class="column">
-                  <a class="button is-info is-12 column" onclick="tipWOW()">Tip WOW</a>
+                  <a class="button is-info is-12 column" onclick="tipWOW()">Tip</a>
                 </div>
               </div>
               <div id="mintButton" class="columns" style="display:none;">
                 <div class="column">
-                  <a class="button is-danger is-12 column" onclick="mint()">Mint</a>
+                  <a class="button is-danger is-12 column" onclick="mint()" id="mintButtonLoading">Mint</a>
                 </div>
               </div>
             {% endif %}
@@ -96,7 +103,22 @@
       } else {
         document.getElementById('mintButton').style.display = "flex";
       }
+      try {
+        _walletAddress = w3.utils.toChecksumAddress('{{ meme.user.public_address }}');
+        const userProfile = await contract.methods.userProfile(_walletAddress).call();
+        console.log(userProfile)
+        if (userProfile.wowneroAddress){document.getElementById('wowneroAddress').innerHTML = userProfile.wowneroAddress};
+      } catch(e) {
+        console.log(e);
+      }
     });
+
+    async function tipWOW() {
+      document.getElementById('profileModal').classList.add('is-active');
+      document.getElementById('closeModal').onclick = () => {
+        document.getElementById('profileModal').classList.remove('is-active');
+      }
+    }
 
     async function tipAVAX() {
       const tokenId = await getTokenID('{{ meme.meta_ipfs_hash }}');
@@ -110,7 +132,7 @@
         notif(`Tipping meme "{{ meme.id | shorten_address }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" to the Avalanche blockchain.`, 'info');
         let res = await contract.methods.tipAVAX(tokenId).send({
           from: walletAddress,
-          value: 1000000000000000,
+          value: 1,
           gasPrice: gasPrice,
           gas: gasLimit
         });
@@ -126,6 +148,7 @@
         notif('Already minted!', 'warning');
         return
       }
+      document.getElementById('mintButtonLoading').classList.add('is-active');
       const walletAddress = await getMetamaskAccount();
       const gasPrice = await w3.eth.getGasPrice();
       const gasLimit = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").estimateGas({from: walletAddress}, function(err, gas){
@@ -140,6 +163,7 @@
           gas: gasLimit
         });
         console.log(res);
+        document.getElementById('mintButtonLoading').classList.remove('is-active');
         window.location.href = "";
       } catch(e) {
         notif(e.message, 'warning');

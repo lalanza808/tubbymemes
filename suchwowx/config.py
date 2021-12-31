@@ -8,6 +8,7 @@ SECRET_KEY = getenv('SECRET_KEY', 'yyyyyyyyyyyyy')
 DATA_FOLDER = getenv('DATA_FOLDER', '/path/to/uploads')
 SERVER_NAME = getenv('SERVER_NAME', '127.0.0.1:5000')
 IPFS_SERVER = getenv('IPFS_SERVER', 'http://127.0.0.1:8080')
+AVAX_RPC = getenv('AVAX_RPC', 'https://api.avax-test.network/ext/bc/C/rpc')
 
 # Cache
 CACHE_HOST = getenv('CACHE_HOST', 'localhost')
