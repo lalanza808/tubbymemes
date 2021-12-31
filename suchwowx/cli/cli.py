@@ -47,13 +47,25 @@ def sync_avax():
                     db.session.commit()
                     print(f'[+] Created user {user_exists.handle}')
                 res = requests.get(f'{config.IPFS_SERVER}/ipfs/{deets[5]}', timeout=30).json()
+                if not 'image' in res:
+                    print('No image IPFS hash, skipping')
+                    continue
+                meme_ipfs_hash = res['image'].split('ipfs://')[1]
+                filename = token_urlsafe(24)
+                print(f'[+] Downloading image hash {meme_ipfs_hash} as {filename}')
+                r = requests.get(f'{config.IPFS_SERVER}/ipfs/{meme_ipfs_hash}', stream=True)
+                with open(f'{config.DATA_FOLDER}/uploads/{filename}', 'wb') as f:
+                    for chunk in r.iter_content(chunk_size = 16*1024):
+                        f.write(chunk)
                 meme = Meme(
                     title=res['name'],
+                    file_name=filename,
                     description=res['description'],
                     user_id=user_exists.id,
                     meta_ipfs_hash=deets[5],
-                    meme_ipfs_hash=res['image'].split('ipfs://')[1],
-                    minted=True
+                    meme_ipfs_hash=meme_ipfs_hash,
+                    minted=True,
+                    synced=True
                 )
                 db.session.add(meme)
                 db.session.commit()

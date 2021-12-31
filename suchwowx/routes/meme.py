@@ -26,8 +26,11 @@ def index():
 
 @bp.route('/mod')
 def mod():
+    if not current_user.is_authenticated:
+        flash('You must be logged in and have MetaMask wallet connected.', 'warning')
+        return redirect(url_for('meme.index'))
     if not current_user.is_moderator():
-        flash('You are not a moderator', 'warning')
+        flash('You are not a moderator.', 'warning')
         return redirect(url_for('meme.index'))
     memes = Meme.query.filter(
         Meme.approved != True
@@ -133,11 +136,12 @@ def approve(meme_id, action):
         existing_meme_ipfs = Meme.query.filter(
             Meme.meme_ipfs_hash == res[1]
         ).first()
-        if existing_meta_ipfs or existing_meme_ipfs:
-            flash('Cannot use an existing IPFS hash for either metadata or memes.', 'warning') # noqa
-            return redirect(url_for('meme.show', meme_id=meme.id))
-        meme.meta_ipfs_hash = res[0]
-        meme.meme_ipfs_hash = res[1]
+        if meme.synced is False:
+            if existing_meta_ipfs or existing_meme_ipfs:
+                flash('Cannot use an existing IPFS hash for either metadata or memes on new posts.', 'warning') # noqa
+                return redirect(url_for('meme.show', meme_id=meme.id))
+            meme.meta_ipfs_hash = res[0]
+            meme.meme_ipfs_hash = res[1]
         meme.approved = True
         db.session.commit()
         flash('Approved meme and published new meme to local IPFS server.', 'success')

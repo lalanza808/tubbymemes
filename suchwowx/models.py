@@ -103,6 +103,7 @@ class Meme(db.Model):
     description = db.Column(db.String(400), nullable=True)
     minted = db.Column(db.Boolean, default=False)
     approved = db.Column(db.Boolean, default=False)
+    synced = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='memes')
 
