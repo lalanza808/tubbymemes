@@ -117,3 +117,16 @@ class Meme(db.Model):
 
     def get_fs_path(self):
         return f'{config.DATA_FOLDER}/uploads/{self.file_name}'
+
+
+class Remote(db.Model):
+    __tablename__ = 'remotes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    create_date = db.Column(db.DateTime, default=datetime.utcnow)
+    last_sync_date = db.Column(db.DateTime, nullable=True)
+    paused = db.Column(db.Boolean, default=False)
+    endpoint = db.Column(db.String(120))
+
+    def __repr__(self):
+        return str(f'remote-{self.id}')

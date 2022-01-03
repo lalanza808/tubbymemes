@@ -20,4 +20,11 @@
   {% else %}
   <a class="button" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">Go Home</a>
   {% endif %}
+
+  {% if request.path == '/remotes' %}
+  <a class="button is-warning" href="{{ url_for('meme.mod') }}" up-preload up-follow=".container">Mod</a>
+  {% endif %}
+  {% if request.path == '/mod' %}
+  <a class="button is-warning" href="{{ url_for('meta.remotes') }}" up-preload up-follow=".container">Remotes</a>
+  {% endif %}
 </div>

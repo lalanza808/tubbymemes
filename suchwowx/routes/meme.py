@@ -44,7 +44,6 @@ def publish():
         flash('You need to connect your wallet first.', 'warning')
         return redirect(url_for('meme.index'))
     meme = None
-    form_err = False
     try:
         client = ipfsApi.Client('127.0.0.1', 5001)
         client.add_json({})
@@ -56,8 +55,6 @@ def publish():
             return '<script>window.history.back()</script>'
         return redirect(url_for('meme.index') + '?ipfs_error=1')
     if "file" in request.files:
-        if form_err:
-            return '<script>window.history.back()</script>'
         title = request.form.get('title')
         description = request.form.get('description')
         file = request.files["file"]

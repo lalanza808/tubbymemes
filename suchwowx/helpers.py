@@ -33,9 +33,8 @@ def upload_to_ipfs(meme_id: str):
     if not meme:
         return False
     try:
-        full_path = f'{config.DATA_FOLDER}/uploads/{meme.file_name}'
         client = ipfsApi.Client('127.0.0.1', 5001)
-        artwork_hashes = client.add(full_path)
+        artwork_hashes = client.add(meme.get_fs_path())
         artwork_hash = artwork_hashes[0]['Hash']
         print(f'[+] Uploaded artwork to IPFS: {artwork_hash}')
         meta = {

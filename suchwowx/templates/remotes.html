@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  {% include 'includes/head.html' %}
+  <body>
+  <section class="section">
+    <div class="container">
+      {% include 'includes/navbar.html' %}
+
+      <div class="screen">
+      <form method="POST" enctype="multipart/form-data" class="site-form" action="{{ url_for('meta.remotes') }}" style="padding-top:1.5em;">
+        <div class="field">
+          <label class="label">Remote Server</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="https://suchwowx.xyz" name="endpoint">
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+      {% if remotes %}
+      <hr>
+      {% for remote in remotes %}
+        <p>{{ remote.endpoint }} - last synced: {{ remote.last_sync_date | humanize }} <a href="{{ url_for('meta.delete_remote', remote_id=remote.id) }}">x</a></p>
+      {% endfor %}
+      {% endif %}
+      </div>
+    </div>
+  </section>
+  {% include 'includes/footer.html' %}
+  </body>
+</html>

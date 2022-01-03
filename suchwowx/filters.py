@@ -16,6 +16,8 @@ def shorten_address(a):
 
 @bp.app_template_filter('humanize')
 def humanize(d):
+    if not d:
+        return 'never'
     return arrow_get(d).humanize()
 
 @bp.app_template_filter()
