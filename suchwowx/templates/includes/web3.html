@@ -83,6 +83,7 @@
   }
 
   async function getTokenID(ipfsHash) {
+    await addAvalancheNetwork();
     if (ipfsHash != '') {
       const tokenId = await contract.methods.metadataTokenId(ipfsHash).call();
       return tokenId;
@@ -90,6 +91,7 @@
   }
 
   async function isMinted(ipfsHash) {
+    await addAvalancheNetwork();
     if (ipfsHash != '') {
       const tokenId = await getTokenID(ipfsHash)
       if (tokenId == 0) {

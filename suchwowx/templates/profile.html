@@ -70,7 +70,7 @@
     </div>
   </section>
   {% include 'includes/footer.html' %}
-  
+
   <script type="text/javascript">
     async function saveDB() {
       await fetch('{{ url_for("api.update_user"	) }}', {
@@ -99,6 +99,7 @@
 
 
     async function fetchUserProfile() {
+      await addAvalancheNetwork();
       _walletAddress = w3.utils.toChecksumAddress('{{ user.public_address }}');
       const userProfile = await contract.methods.userProfile(_walletAddress).call();
       if (userProfile.userHandle){document.getElementById('userHandle').innerHTML = userProfile.userHandle};
@@ -114,6 +115,7 @@
       if (handle == "") {
         notif('Cannot publish an empty value.', 'warning');
       }
+      await addAvalancheNetwork();
       const walletAddress = await getMetamaskAccount();
       const gasPrice = await w3.eth.getGasPrice();
       const gasLimit = await contract.methods.setUserHandle(handle).estimateGas(function(err, gas){
@@ -139,6 +141,7 @@
       if (address == "") {
         notif('Cannot publish an empty value.', 'warning');
       }
+      await addAvalancheNetwork();
       const walletAddress = await getMetamaskAccount();
       const gasPrice = await w3.eth.getGasPrice();
       const gasLimit = await contract.methods.setUserWowneroAddress(address).estimateGas(function(err, gas){
@@ -164,6 +167,7 @@
       if (_hash == "") {
         notif('Cannot publish an empty value.', 'warning');
       }
+      await addAvalancheNetwork();
       const walletAddress = await getMetamaskAccount();
       const gasPrice = await w3.eth.getGasPrice();
       const gasLimit = await contract.methods.setUserMetadata(_hash).estimateGas(function(err, gas){
