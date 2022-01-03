@@ -3,6 +3,7 @@ from datetime import datetime
 
 from flask import url_for
 from flask_login import login_user
+from sqlalchemy import inspect
 
 from suchwowx.factory import db
 from suchwowx import config
@@ -106,6 +107,10 @@ class Meme(db.Model):
     synced = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('User', back_populates='memes')
+
+    def as_dict(self):
+        return {c.key: getattr(self, c.key)
+            for c in inspect(self).mapper.column_attrs}
 
     def __repr__(self):
         return str(f'meme-{self.id}')

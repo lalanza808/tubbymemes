@@ -5,10 +5,22 @@ from flask_login import current_user
 
 from suchwowx.factory import db
 from suchwowx.helpers import verify_signature
-from suchwowx.models import User
+from suchwowx.models import User, Meme
 
 
 bp = Blueprint('api', 'api', url_prefix='/api/v1')
+
+
+@bp.route('/memes')
+def memes():
+    """
+    List all the approved memes on the server to allow remote syncing.
+    """
+    all_memes = dict()
+    memes = Meme.query.filter(Meme.approved == True).all()
+    for meme in memes:
+        all_memes[meme.id] = meme.as_dict()
+    return jsonify(all_memes)
 
 
 @bp.route('/user_exists')
