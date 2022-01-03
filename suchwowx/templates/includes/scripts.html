@@ -1,5 +1,6 @@
-<script src="/static/js/vendor/noty-3.2.0.js"></script>
+
 <script src="/static/js/main.js"></script>
+{% include 'includes/web3.html' %}
 {% if not current_user.is_authenticated %}
 <script src="/static/js/vendor/metamask-onboarding-1.0.1.bundle.js"></script>
 <script src="/static/js/metamask.js"></script>
@@ -7,6 +8,7 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
+  <script src="/static/js/vendor/noty-3.2.0.js"></script>
   <script type="text/javascript">
     {% for category, message in messages %}
       {% if category == None %}{% set category = 'info' %}{% endif %}

@@ -94,7 +94,6 @@
   </section>
   {% include 'includes/footer.html' %}
   {% if meme.approved %}
-  {% include 'includes/web3.html' %}
   <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', async () => {
       let minted = await isMinted('{{ meme.meta_ipfs_hash }}');

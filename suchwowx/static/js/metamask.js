@@ -30,10 +30,11 @@ async function onboardMetaMask(){
       onboarding.stopOnboarding();
     } else {
       onboardButton.onclick = async () => {
+        try {
         onboardButton.classList.add('is-loading');
         onboardButton.disabled = true;
         let userExists;
-        await confirmAvalanche();
+        await addAvalancheNetwork();
         const allAccounts = await window.ethereum.request({
           method: 'eth_requestAccounts',
         });
@@ -74,7 +75,11 @@ async function onboardMetaMask(){
                 window.location.href = '/';
               }
           })
+        } catch(e) {
+          console.log(e);
+          onboardButton.classList.remove('is-loading');
         }
+      }
     }
   };
 

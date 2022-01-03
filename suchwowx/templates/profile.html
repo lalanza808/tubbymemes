@@ -70,7 +70,7 @@
     </div>
   </section>
   {% include 'includes/footer.html' %}
-  {% include 'includes/web3.html' %}
+  
   <script type="text/javascript">
     async function saveDB() {
       await fetch('{{ url_for("api.update_user"	) }}', {

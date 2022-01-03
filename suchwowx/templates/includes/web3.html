@@ -13,6 +13,75 @@
     return account
   }
 
+  async function addWOWX() {
+    let tokenAddress;
+    if ('{{ config.CONTRACT_TESTNET }}' == 'True') {
+      tokenAddress = '0xc6B039b1e0be1ba0B433f319898438E782E5dEBA';
+    } else {
+      tokenAddress = '0xba5dc7e77d150816b758e9826fcad2d74820e379';
+    }
+    try {
+      await ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: tokenAddress.toLowerCase(),
+            symbol: 'WOWX',
+            decimals: 18,
+            image: 'https://github.com/wownerox/meta/raw/main/logo.png'
+          }
+        },
+      });
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  async function addAvalancheNetwork(){
+    let chainId, rpcUrl, explorerUrl, name;
+    if ('{{ config.CONTRACT_TESTNET }}' == 'True') {
+      name = 'Avalanche Testnet';
+      chainId = '0xA869';
+      rpcUrl = 'https://api.avax-test.network/ext/bc/C/rpc';
+      explorerUrl = 'https://testnet.snowtrace.io';
+    } else {
+      name = 'Avalanche Mainnet';
+      chainId = '0xA86A';
+      rpcUrl = 'https://api.avax.network/ext/bc/C/rpc';
+      explorerUrl = 'https://snowtrace.io';
+    }
+    try {
+      await ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chainId }],
+      });
+    } catch (switchError) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (switchError.code === 4902) {
+        try {
+          await ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: chainId,
+              chainName: name,
+              nativeCurrency: {
+                name: 'Avalanche',
+                symbol: 'AVAX',
+                decimals: 18,
+              },
+              rpcUrls: [rpcUrl],
+              blockExplorerUrls: [explorerUrl],
+            }],
+          });
+        } catch (addError) {
+          // handle "add" error
+        }
+      }
+      // handle other "switch" errors
+    }
+  }
+
   async function getTokenID(ipfsHash) {
     if (ipfsHash != '') {
       const tokenId = await contract.methods.metadataTokenId(ipfsHash).call();
