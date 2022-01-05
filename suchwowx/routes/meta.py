@@ -46,7 +46,7 @@ def remotes():
             else:
                 flash('That remote server already exists.', 'warning')
         else:
-            flash('Incorrect endpoint provided, must start with http or https', 'warning') # noqa
+            flash('Incorrect endpoint provided, must start with http or https.', 'warning') # noqa
     return render_template('remotes.html', remotes=remotes)
 
 
