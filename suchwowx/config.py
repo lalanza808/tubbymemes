@@ -22,12 +22,14 @@ TEMPLATES_AUTO_RELOAD = getenv('TEMPLATES_AUTO_RELOAD', True)
 
 # Contract
 CONTRACT_TESTNET = getenv('TESTNET', True)
+CONTRACT_OWNER = 'lzamenace.eth'
 if CONTRACT_TESTNET:
     WOWX_ADDRESS = '0xc6B039b1e0be1ba0B433f319898438E782E5dEBA'      # WOWX testnet
     CONTRACT_ADDRESS = '0xE1b6483729557E539cfD9c3Bdb754C54c16cFCe7'  # SWX testnet
 else:
     WOWX_ADDRESS = '0xba5dc7e77d150816b758e9826fcad2d74820e379'      # WOWX mainnet
     CONTRACT_ADDRESS = ''  # SWX mainnet
+
 CONTRACT_ABI = [
   {
     "inputs": [
