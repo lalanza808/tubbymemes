@@ -16,8 +16,11 @@
   // Web3 and smart contract details
   let contractABI = {{ config.CONTRACT_ABI | tojson }};
   let contractAddress = "{{ config.CONTRACT_ADDRESS }}";
+  let wowxABI = {{ config.WOWX_ABI | tojson }};
+  let wowxAddress = "{{ config.WOWX_ADDRESS }}";
   const w3 = new Web3(Web3.givenProvider);
   const contract = new w3.eth.Contract(contractABI, contractAddress);
+  const wowxContract = new w3.eth.Contract(wowxABI, wowxAddress);
 
   async function getMetamaskAccount() {
     const accounts = await window.ethereum.request({
