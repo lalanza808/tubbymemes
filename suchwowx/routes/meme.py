@@ -43,6 +43,9 @@ def publish():
     if not current_user.is_authenticated:
         flash('You need to connect your wallet first.', 'warning')
         return redirect(url_for('meme.index'))
+    if not current_user.wownero_address:
+        flash('You need to specify your Wownero wallet address first.', 'warning')
+        return redirect(url_for('user.show', handle=current_user.handle))
     meme = None
     try:
         client = ipfsApi.Client('127.0.0.1', 5001)
