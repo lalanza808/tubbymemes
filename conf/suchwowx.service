@@ -1,0 +1,25 @@
+[Unit]
+Description=SuchWowX meme service
+Documentation=https://suchwowx.xyz
+After=network.target
+
+[Service]
+PermissionsStartOnly = true
+PIDFile = /opt/suchwowx/data/gunicorn/suchwowx.pid
+User = suchwowx
+Group = suchwowx
+WorkingDirectory = /opt/suchwowx
+ExecStartPre = /bin/mkdir -p /opt/suchwowx/data/gunicorn
+ExecStartPre = /bin/chown -R suchwowx:suchwowx /opt/suchwowx/data/gunicorn
+Environment = FLASK_APP=suchwowx/app.py
+Environment = FLASK_SECRETS=config.py
+Environment = FLASK_ENV=production
+Environment = FLASK_DEBUG=0
+ExecStart = /opt/suchwowx/.venv/bin/gunicorn --bind 127.0.0.1:4000 "suchwowx.app:app" --log-file /opt/suchwowx/data/gunicorn/gunicorn.log --pid /opt/suchwowx/data/gunicorn/suchwowx.pid --reload
+ExecReload = /bin/kill -s HUP /opt/suchwowx/data/gunicorn/suchwowx.pid
+ExecStop = /bin/kill -s TERM /opt/suchwowx/data/gunicorn/suchwowx.pid
+ExecStopPost = /bin/rm -rf /opt/suchwowx/data/gunicorn/suchwowx.pid
+PrivateTmp = true
+
+[Install]
+WantedBy=default.target
