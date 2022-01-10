@@ -1,2 +1,11 @@
-DATA_FOLDER=/home/yourname/git/github.com/lalanza808/suchwowx/data
-SECRET_KEY=mycrazyrandomstring
+# Production env - delete this line and unused config
+SECRET_KEY=vrBWMR2$nCdPuZ27
+DATA_FOLDER=/opt/suchwowx/data
+SERVER_NAME=myservername.com
+AVAX_RPC=https://api.avax.network/ext/bc/C/rpc
+CONTRACT_TESTNET=0
+
+
+# Test env - delete this line and unused config
+SECRET_KEY=vrBWMR2$nCdPuZ27
+DATA_FOLDER=/opt/suchwowx/data

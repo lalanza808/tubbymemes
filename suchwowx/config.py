@@ -10,10 +10,6 @@ SERVER_NAME = getenv('SERVER_NAME', '127.0.0.1:5000')
 IPFS_SERVER = getenv('IPFS_SERVER', 'http://127.0.0.1:8080')
 AVAX_RPC = getenv('AVAX_RPC', 'https://api.avax-test.network/ext/bc/C/rpc')
 
-# Cache
-CACHE_HOST = getenv('CACHE_HOST', 'localhost')
-CACHE_PORT = getenv('CACHE_PORT', 6379)
-
 # Uploads
 SESSION_TYPE = 'filesystem'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'svg', 'mp4', 'webp'}
@@ -21,9 +17,9 @@ MAX_CONTENT_LENGTH = 32 * 1024 * 1024
 TEMPLATES_AUTO_RELOAD = getenv('TEMPLATES_AUTO_RELOAD', True)
 
 # Contract
-CONTRACT_TESTNET = getenv('TESTNET', True)
+CONTRACT_TESTNET = getenv('TESTNET', 1)
 CONTRACT_OWNER = 'lzamenace.eth'
-if CONTRACT_TESTNET:
+if int(CONTRACT_TESTNET) == 1:
     WOWX_ADDRESS = '0xc6B039b1e0be1ba0B433f319898438E782E5dEBA'      # WOWX testnet
     CONTRACT_ADDRESS = '0xE1b6483729557E539cfD9c3Bdb754C54c16cFCe7'  # SWX testnet
 else:
