@@ -28,8 +28,8 @@ def sync_avax():
         # first get metadata ipfs hash
         deets = contract.functions.tokenMeme(i).call()
         try:
-            meme_exists = Meme.query.filter(Meme.meta_ipfs_hash == deets[5]).first() # noqa
-            user_exists = User.query.filter(User.public_address == deets[4].lower()).first() # noqa
+            meme_exists = Meme.query.filter(Meme.meta_ipfs_hash == deets[8]).first() # noqa
+            user_exists = User.query.filter(User.public_address == deets[6].lower()).first() # noqa
             if meme_exists:
                 if not meme_exists.minted:
                     meme_exists.minted = True
