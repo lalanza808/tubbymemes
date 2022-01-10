@@ -43,6 +43,10 @@ class User(db.Model):
     moderator = db.relationship('Moderator', back_populates='user')
     memes = db.relationship('Meme', back_populates='user')
 
+    def as_dict(self):
+        return {c.key: getattr(self, c.key)
+            for c in inspect(self).mapper.column_attrs if c.key != 'nonce'}
+
     def __repr__(self):
         return str(self.handle)
 

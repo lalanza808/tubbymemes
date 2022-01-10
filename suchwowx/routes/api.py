@@ -20,6 +20,7 @@ def memes():
     memes = Meme.query.filter(Meme.approved == True).all()
     for meme in memes:
         all_memes[meme.id] = meme.as_dict()
+        all_memes[meme.id]['user'] = meme.user.as_dict()
     return jsonify(all_memes)
 
 
