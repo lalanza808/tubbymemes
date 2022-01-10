@@ -65,9 +65,11 @@
             {% else %}
             <br/>
             <div id="tipButtons" class="columns" style="display:none;">
+              {% if meme.user.wownero_address %}
               <div class="column">
                 <a class="button is-info is-12" onclick="tipWOW()" id="tipWOWButton" style="width:100%;">Tip via p2p WOW</a>
               </div>
+              {% endif %}
               <div class="column">
                 <a class="button is-info is-12" onclick="tipSC()" id="tipSCButton" style="width:100%;">Tip via Smart Contract</a>
               </div>
