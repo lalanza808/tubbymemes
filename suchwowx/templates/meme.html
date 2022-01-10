@@ -48,6 +48,9 @@
               <span id="wowxTips">?</span> WOWX,
               <span id="avaxTips">?</span> AVAX
             </p>
+            {% if meme.minted %}
+            <p><strong>Token ID:</strong> <span id="tokenId">? </span> <a href="{{ config.CONTRACT_ADDRESS | show_snowtrace }}">(contract)</a></p>
+            {% endif %}
 
             {% if not meme.approved %}
             <br/>
@@ -160,6 +163,7 @@
       try {
         const tokenId = await getTokenID('{{ meme.meta_ipfs_hash }}');
         const memeDeets = await contract.methods.tokenMeme(tokenId).call();
+        document.getElementById('tokenId').innerHTML = tokenId;
         document.getElementById('wowxTips').innerHTML = await w3.utils.fromWei(memeDeets.creatorTipsWOWX);
         document.getElementById('avaxTips').innerHTML = await w3.utils.fromWei(memeDeets.creatorTipsAVAX);
       } catch(e) {
