@@ -119,12 +119,7 @@
 
 
   async function addWOWX() {
-    let tokenAddress;
-    if ('{{ config.CONTRACT_TESTNET }}' == 'True') {
-      tokenAddress = '0xc6B039b1e0be1ba0B433f319898438E782E5dEBA';
-    } else {
-      tokenAddress = '0xba5dc7e77d150816b758e9826fcad2d74820e379';
-    }
+    let tokenAddress = '{{ config.WOWX_ADDRESS }}';
     try {
       await ethereum.request({
         method: 'wallet_watchAsset',
