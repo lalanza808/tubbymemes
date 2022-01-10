@@ -43,12 +43,13 @@
             {% if meme.meme_ipfs_hash %}
             <p><strong>Meme IPFS:</strong> <a href="{{ meme_url }}" target=_self>{{ meme.meme_ipfs_hash }}</a></p>
             {% endif %}
-            <p><strong>Tips Received:</strong>
+            {% if meme.minted %}
+            <p>
+              <strong>Tips Received:</strong>
               <span id="wowTips">?</span> WOW,
               <span id="wowxTips">?</span> WOWX,
               <span id="avaxTips">?</span> AVAX
             </p>
-            {% if meme.minted %}
             <p><strong>Token ID:</strong> <span id="tokenId">? </span> <a href="{{ config.CONTRACT_ADDRESS | show_snowtrace }}">(contract)</a></p>
             {% endif %}
 
