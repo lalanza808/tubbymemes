@@ -35,5 +35,9 @@ run-avax-test:
 
 sync-avax:
 	./manage.sh sync-avax
+
+sync-remotes:
+	./manage.sh sync-remotes
+
 kill:
 	pkill -e -f suchwowx
