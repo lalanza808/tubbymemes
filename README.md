@@ -97,6 +97,9 @@ cp conf/suchwowx.service /etc/systemd/system/suchwowx.service
 systemctl daemon-reload
 systemctl enable suchwowx
 systemctl start suchwowx
+
+# setup ongoing syncing with remote servers and Avalanche network
+crontab -u suchwowx conf/crontab
 ```
 
 At this point you should have Nginx web server running with TLS certificates generated with Letsencrypt/Certbot, Systemd services for IPFS daemon for serving files and Gunicorn for serving the Flask application.

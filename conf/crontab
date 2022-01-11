@@ -1,0 +1,5 @@
+# Sync with remote servers specified by operator
+0 * * * * sh -c "cd /opt/suchwowx; ./manage.sh sync-remotes"
+
+# Sync with Avalanche blockchain to import minted memes
+30 * * * * sh -c "cd /opt/suchwowx; ./manage.sh sync-avax"
