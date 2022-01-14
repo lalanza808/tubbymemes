@@ -5,10 +5,10 @@ This service is a continuation of SuchWow for the Wownero cryptocurrency project
 ## Setup
 
 Tools you will need:
-* https://github.com/ava-labs/avalanchego/
 * https://ipfs.io/#install
 * python3 (linux os will have this)
 * python3-venv
+* https://github.com/ava-labs/avalanchego/ (optional)
 
 ### Development
 
