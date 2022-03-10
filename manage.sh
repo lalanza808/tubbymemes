@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source .venv/bin/activate
-export FLASK_APP=suchwowx/app.py
+export FLASK_APP=tubbymemes/app.py
 export FLASK_SECRETS=config.py
 export FLASK_DEBUG=1
 export FLASK_ENV=development
@@ -18,7 +18,7 @@ then
   pgrep -F $BASE/gunicorn.pid
   if [[ $? != 0 ]]; then
     gunicorn \
-      --bind 127.0.0.1:4000 "suchwowx.app:app" \
+      --bind 127.0.0.1:4000 "tubbymemes.app:app" \
       --daemon \
       --log-file $BASE/gunicorn.log \
       --pid $BASE/gunicorn.pid \

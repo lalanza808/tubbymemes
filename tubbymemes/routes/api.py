@@ -3,9 +3,9 @@ from secrets import token_urlsafe
 from flask import Blueprint, request, jsonify
 from flask_login import current_user
 
-from suchwowx.factory import db
-from suchwowx.helpers import verify_signature
-from suchwowx.models import User, Meme
+from tubbymemes.factory import db
+from tubbymemes.helpers import verify_signature
+from tubbymemes.models import User, Meme
 
 
 bp = Blueprint('api', 'api', url_prefix='/api/v1')

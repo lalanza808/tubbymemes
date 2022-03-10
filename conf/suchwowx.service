@@ -1,24 +1,24 @@
 [Unit]
-Description=SuchWowX meme service
-Documentation=https://suchwowx.xyz
+Description=tubbymemes meme service
+Documentation=https://tubbymemes.xyz
 After=network.target
 
 [Service]
 PermissionsStartOnly = true
-PIDFile = /opt/suchwowx/data/gunicorn/suchwowx.pid
-User = suchwowx
-Group = suchwowx
-WorkingDirectory = /opt/suchwowx
-ExecStartPre = /bin/mkdir -p /opt/suchwowx/data/gunicorn
-ExecStartPre = /bin/chown -R suchwowx:suchwowx /opt/suchwowx/data/gunicorn
-Environment = FLASK_APP=suchwowx/app.py
+PIDFile = /opt/tubbymemes/data/gunicorn/tubbymemes.pid
+User = tubbymemes
+Group = tubbymemes
+WorkingDirectory = /opt/tubbymemes
+ExecStartPre = /bin/mkdir -p /opt/tubbymemes/data/gunicorn
+ExecStartPre = /bin/chown -R tubbymemes:tubbymemes /opt/tubbymemes/data/gunicorn
+Environment = FLASK_APP=tubbymemes/app.py
 Environment = FLASK_SECRETS=config.py
 Environment = FLASK_ENV=production
 Environment = FLASK_DEBUG=0
-ExecStart = /opt/suchwowx/.venv/bin/gunicorn --bind 127.0.0.1:4000 "suchwowx.app:app" --log-file /opt/suchwowx/data/gunicorn/gunicorn.log --pid /opt/suchwowx/data/gunicorn/suchwowx.pid --reload
-ExecReload = /bin/kill -s HUP /opt/suchwowx/data/gunicorn/suchwowx.pid
-ExecStop = /bin/kill -s TERM /opt/suchwowx/data/gunicorn/suchwowx.pid
-ExecStopPost = /bin/rm -rf /opt/suchwowx/data/gunicorn/suchwowx.pid
+ExecStart = /opt/tubbymemes/.venv/bin/gunicorn --bind 127.0.0.1:4000 "tubbymemes.app:app" --log-file /opt/tubbymemes/data/gunicorn/gunicorn.log --pid /opt/tubbymemes/data/gunicorn/tubbymemes.pid --reload
+ExecReload = /bin/kill -s HUP /opt/tubbymemes/data/gunicorn/tubbymemes.pid
+ExecStop = /bin/kill -s TERM /opt/tubbymemes/data/gunicorn/tubbymemes.pid
+ExecStopPost = /bin/rm -rf /opt/tubbymemes/data/gunicorn/tubbymemes.pid
 PrivateTmp = true
 
 [Install]

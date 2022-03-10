@@ -5,8 +5,8 @@ from flask import url_for
 from flask_login import login_user
 from sqlalchemy import inspect
 
-from suchwowx.factory import db
-from suchwowx import config
+from tubbymemes.factory import db
+from tubbymemes import config
 
 
 def rand_id():

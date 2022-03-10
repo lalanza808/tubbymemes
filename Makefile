@@ -7,6 +7,7 @@ shell:
 	bash manage.sh shell
 
 init:
+	mkdir -p data
 	.venv/bin/alembic upgrade head
 
 dev:
@@ -40,4 +41,4 @@ sync-remotes:
 	./manage.sh sync-remotes
 
 kill:
-	pkill -e -f suchwowx
+	pkill -e -f tubbymemes

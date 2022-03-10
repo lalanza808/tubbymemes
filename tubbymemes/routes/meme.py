@@ -7,10 +7,10 @@ from flask import redirect, flash, url_for
 from flask_login import current_user
 from web3 import Web3
 
-from suchwowx.models import Meme
-from suchwowx.helpers import upload_to_ipfs
-from suchwowx.factory import db
-from suchwowx import config
+from tubbymemes.models import Meme
+from tubbymemes.helpers import upload_to_ipfs
+from tubbymemes.factory import db
+from tubbymemes import config
 
 
 bp = Blueprint('meme', 'meme')

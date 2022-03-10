@@ -2,9 +2,9 @@ from flask import Blueprint, render_template, send_from_directory
 from flask import redirect, url_for, flash, request
 from flask_login import logout_user, current_user
 
-from suchwowx.models import User, Remote
-from suchwowx.factory import db
-from suchwowx import config
+from tubbymemes.models import User, Remote
+from tubbymemes.factory import db
+from tubbymemes import config
 
 
 bp = Blueprint('meta', 'meta')

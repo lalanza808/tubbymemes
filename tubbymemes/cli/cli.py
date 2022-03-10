@@ -3,10 +3,10 @@ from flask import Blueprint
 from secrets import token_urlsafe
 from datetime import datetime
 
-from suchwowx.factory import db
-from suchwowx.helpers import get_eth_contract
-from suchwowx.models import Meme, User, Remote
-from suchwowx import config
+from tubbymemes.factory import db
+from tubbymemes.helpers import get_eth_contract
+from tubbymemes.models import Meme, User, Remote
+from tubbymemes import config
 
 
 bp = Blueprint('cli', 'cli', cli_group=None)

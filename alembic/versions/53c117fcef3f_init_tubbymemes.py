@@ -1,4 +1,4 @@
-"""init suchwowx
+"""init tubbymemes
 
 Revision ID: 53c117fcef3f
 Revises:

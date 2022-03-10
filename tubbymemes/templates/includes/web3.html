@@ -80,7 +80,7 @@
                 nonce = data['nonce'];
             })
 
-          const msg = 'Authentication request from SuchWowX app! Verifying message with nonce ' + nonce
+          const msg = 'Authentication request from tubbymemes app! Verifying message with nonce ' + nonce
           const signedData = await window.ethereum.request({
             method: 'personal_sign',
             params: [msg, allAccounts[0]]

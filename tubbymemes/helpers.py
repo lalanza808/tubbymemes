@@ -1,15 +1,15 @@
 import ipfsApi
 from eth_account.messages import encode_defunct
 
-from suchwowx.models import Meme
-from suchwowx.factory import w3
-from suchwowx import config
+from tubbymemes.models import Meme
+from tubbymemes.factory import w3
+from tubbymemes import config
 
 
 def get_eth_contract():
     """
     Return a web3 contract object with the currently
-    deployed SuchWowX smart contract.
+    deployed tubbymemes smart contract.
     """
     contract_abi = config.CONTRACT_ABI
     contract_address = w3.toChecksumAddress(config.CONTRACT_ADDRESS)

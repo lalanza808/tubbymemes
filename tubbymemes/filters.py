@@ -1,7 +1,7 @@
 from flask import Blueprint
 from arrow import get as arrow_get
 
-from suchwowx import config
+from tubbymemes import config
 
 
 bp = Blueprint('filters', 'filters')

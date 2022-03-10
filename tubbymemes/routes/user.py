@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from flask import redirect, url_for
 
-from suchwowx.models import User
+from tubbymemes.models import User
 
 
 bp = Blueprint('user', 'user')

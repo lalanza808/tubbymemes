@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mobility import Mobility
 from web3 import Web3
 
-from suchwowx import config
+from tubbymemes import config
 
 
 db = SQLAlchemy()
@@ -39,14 +39,14 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        from suchwowx.models import User
+        from tubbymemes.models import User
         user = User.query.get(user_id)
         return user
 
     with app.app_context():
-        from suchwowx import filters
-        from suchwowx.routes import api, meme, meta, user
-        from suchwowx.cli import mod, cli
+        from tubbymemes import filters
+        from tubbymemes.routes import api, meme, meta, user
+        from tubbymemes.cli import mod, cli
         app.register_blueprint(filters.bp)
         app.register_blueprint(api.bp)
         app.register_blueprint(meme.bp)

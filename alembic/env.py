@@ -4,9 +4,9 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 from alembic import context
 
-from suchwowx.factory import db
-from suchwowx.models import *
-from suchwowx import config as swx_config
+from tubbymemes.factory import db
+from tubbymemes.models import *
+from tubbymemes import config as c
 
 
 # this is the Alembic Config object, which provides
@@ -15,7 +15,7 @@ config = context.config
 
 # this will overwrite the ini-file sqlalchemy.url path
 # with secrets from our .env file (pulled via config.py)
-sqlalchemy_url = f'sqlite:///{swx_config.DATA_FOLDER}/sqlite.db'
+sqlalchemy_url = f'sqlite:///{c.DATA_FOLDER}/sqlite.db'
 config.set_main_option('sqlalchemy.url', sqlalchemy_url)
 
 # Interpret the config file for Python logging.

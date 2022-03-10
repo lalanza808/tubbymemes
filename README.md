@@ -1,6 +1,10 @@
-# SuchWowX
+# tubbymemes
 
-This service is a continuation of SuchWow for the Wownero cryptocurrency project. It has been revamped to use Interplanetary Filesystem, server federation / content sharing, and optionally Avalanche network via a smart contract with some useful features (if you're into that). It's a decentralized application (dApp); it's preferred you run it locally and bootstrap the services on your own machine.
+Meme site dedicated to the best project on the Etherium network ;)
+
+https://tubbycats.xyz/about
+
+Memes are backed by Interplanetary Filesystem, server federation / content sharing, and optionally Avalanche network via a smart contract with some useful features (if you're into that). It's a decentralized application (dApp); it's preferred you run it locally and bootstrap the services on your own machine.
 
 ## Setup
 
@@ -17,6 +21,9 @@ I have provided a `Makefile` with some helpful stuff...make sure to install `mak
 ```
 # install python virtual environment and install application dependencies
 make setup
+
+# setup secrets
+cp env-example .env && vim .env
 
 # install ipfs
 sudo make install-ipfs
@@ -64,7 +71,7 @@ openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 cp conf/nginx-ssl.conf /etc/nginx/conf.d/ssl.conf
 
 # setup nginx site config from this repo
-cp conf/nginx-site.conf /etc/nginx/sites-enabled/suchwowx.conf
+cp conf/nginx-site.conf /etc/nginx/sites-enabled/tubbymemes.conf
 
 # generate TLS certificates
 service nginx stop
@@ -82,24 +89,24 @@ systemctl daemon-reload
 systemctl enable ipfs
 systemctl start ipfs
 
-# setup suchwowx service account and storage location
-useradd -m suchwowx
-mkdir -p /opt/suchwowx
+# setup tubbymemes service account and storage location
+useradd -m tubbymemes
+mkdir -p /opt/tubbymemes
 
-# setup suchwowx application
-git clone https://github.com/lalanza808/suchwowx /opt/suchwowx
-cp /opt/suchwowx/env-example /opt/suchwowx/.env
-vim /opt/suchwowx/.env
-chown -R suchwowx:suchwowx /opt/suchwowx
+# setup tubbymemes application
+git clone https://github.com/lalanza808/tubbymemes /opt/tubbymemes
+cp /opt/tubbymemes/env-example /opt/tubbymemes/.env
+vim /opt/tubbymemes/.env
+chown -R tubbymemes:tubbymemes /opt/tubbymemes
 
-# setup suchwowx service daemon
-cp conf/suchwowx.service /etc/systemd/system/suchwowx.service
+# setup tubbymemes service daemon
+cp conf/tubbymemes.service /etc/systemd/system/tubbymemes.service
 systemctl daemon-reload
-systemctl enable suchwowx
-systemctl start suchwowx
+systemctl enable tubbymemes
+systemctl start tubbymemes
 
 # setup ongoing syncing with remote servers and Avalanche network
-crontab -u suchwowx conf/crontab
+crontab -u tubbymemes conf/crontab
 ```
 
 At this point you should have Nginx web server running with TLS certificates generated with Letsencrypt/Certbot, Systemd services for IPFS daemon for serving files and Gunicorn for serving the Flask application.

@@ -1,7 +1,7 @@
 from huey import RedisHuey
 
-from suchwowx.factory import create_app_huey
-from suchwowx import config
+from tubbymemes.factory import create_app_huey
+from tubbymemes import config
 
 
 huey = RedisHuey(

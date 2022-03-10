@@ -1,7 +1,7 @@
 from logging.config import dictConfig
 
-from suchwowx.factory import create_app
-from suchwowx import config
+from tubbymemes.factory import create_app
+from tubbymemes import config
 
 
 app = create_app()

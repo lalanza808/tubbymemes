@@ -1,8 +1,8 @@
 import click
 from flask import Blueprint
 
-from suchwowx.models import Moderator, User
-from suchwowx.factory import db
+from tubbymemes.models import Moderator, User
+from tubbymemes.factory import db
 
 
 bp = Blueprint('mod', 'mod')
