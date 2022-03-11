@@ -1,15 +1,29 @@
 <head>
-  <title>tubbymemes Interplanetary Memes</title>
-  <meta property="og:description" content="Interplanetary meme platform powered by IPFS, Tubby Cats, and degeneracy.">
-  <meta property="og:image" content="https://tubbymemes.xyz/static/img/logo.png">
-  <meta property="og:title" content="tubbymemes">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@lza_menace">
-  <meta name="twitter:title" content="tubbymemes">
-  <meta name="twitter:description" content="Interplanetary meme platform powered by IPFS, Tubby Cats, and degeneracy.">
-  <meta name="twitter:creator" content="@lza_menace">
-  <meta name="twitter:image" content="https://tubbymemes.xyz/static/img/logo.png">
-  <meta name="twitter:domain" content="https://tubbymemes.xyz">
+  {% if meme %}
+    <title>{{ meme.title }}</title>
+    <meta property="og:description" content="{{ meme.description }}">
+    <meta property="og:image" content="{{ url_for('meta.uploaded_file', filename=meme.file_name, _external=True) }}">
+    <meta property="og:title" content="{{ meme.title }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@lza_menace">
+    <meta name="twitter:title" content="{{ meme.title }}">
+    <meta name="twitter:description" content="{{ meme.description }}">
+    <meta name="twitter:creator" content="@lza_menace">
+    <meta name="twitter:image" content="{{ url_for('meta.uploaded_file', filename=meme.file_name, _external=True) }}">
+    <meta name="twitter:domain" content="https://tubbymemes.xyz">
+  {% else %}
+    <title>tubbymemes!</title>
+    <meta property="og:description" content="Interplanetary meme platform powered by IPFS, Tubby Cats, and degeneracy.">
+    <meta property="og:image" content="https://tubbymemes.xyz/static/img/logo.png">
+    <meta property="og:title" content="tubbymemes">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@lza_menace">
+    <meta name="twitter:title" content="tubbymemes">
+    <meta name="twitter:description" content="Interplanetary meme platform powered by IPFS, Tubby Cats, and degeneracy.">
+    <meta name="twitter:creator" content="@lza_menace">
+    <meta name="twitter:image" content="https://tubbymemes.xyz/static/img/logo.png">
+    <meta name="twitter:domain" content="https://tubbymemes.xyz">
+  {% endif %}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script src="/static/js/vendor/unpoly-2.5.0.min.js"></script>
