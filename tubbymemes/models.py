@@ -52,10 +52,10 @@ class User(db.Model):
         return self.id
 
     def generate_nonce(self):
-        return rand_id()
+        return rand_id()[0:8]
 
     def change_nonce(self):
-        self.nonce = rand_id()
+        self.nonce = self.generate_nonce()
         self.nonce_date = datetime.utcnow()
         db.session.commit()
 
