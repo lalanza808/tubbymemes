@@ -2,7 +2,7 @@
 <div class="card {% if meme.minted %}mintedAVAX{% endif %}">
   <div class="card-image">
     <figure class="image">
-      <a href="{{ url_for('meme.show', meme_id=meme.id) }}">
+      <a href="{{ url_for('meme.show', meme_id=meme.id) }}" up-preload up-follow=".container">
         {% if meme.file_name %}
         {% if meme.file_name.endswith('mp4') %}
           <video class="img-fluid" {% if not request.MOBILE %}autoplay{% else %}controls{% endif %} muted loop>

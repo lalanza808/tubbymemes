@@ -1,29 +1,36 @@
-<div class="screen">
-  <h1 class="title">
-    tubbymemes.
-  </h1>
-  <p class="subtitle">
-    Memes. <strong>Interplanetary</strong>!
-  </p>
-  {% if request.path == '/' %}
-  <a class="button is-secondary" href="{{ url_for('meta.about') }}" up-target=".container">About</a>
-  {% if current_user.is_authenticated %}
-    <a class="button is-danger" href="{{ url_for('meta.disconnect') }}">Disconnect</a>
-    {% if current_user.is_moderator() %}
-      <a class="button is-warning" href="{{ url_for('meme.mod') }}" up-preload up-follow=".container">Mod</a>
-    {% endif %}
-    <a class="button is-primary" href="{{ url_for('meme.publish') }}">New Meme</a>
-  {% else %}
-    <a class="button is-primary" id="metamaskConnect" onclick="onboardMetaMask();">Connect</a>
-  {% endif %}
-  {% else %}
-  <a class="button" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">Go Home</a>
-  {% endif %}
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item ml-2" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">
+      <img src="/static/img/logo.png" style="max-height:50px;">
+    </a>
+  </div>
 
-  {% if request.path == '/remotes' %}
-  <a class="button is-warning" href="{{ url_for('meme.mod') }}" up-preload up-follow=".container">Mod</a>
-  {% endif %}
-  {% if request.path == '/mod' %}
-  <a class="button is-warning" href="{{ url_for('meta.remotes') }}" up-preload up-follow=".container">Remotes</a>
-  {% endif %}
-</div>
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+
+    </div>
+
+    <div class="navbar-end">
+      <a class="navbar-item" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">
+        Home
+      </a>
+
+      <a class="navbar-item" href="{{ url_for('meta.about') }}" up-preload up-follow=".container">
+        About
+      </a>
+      <div class="navbar-item">
+        <div class="buttons">
+          {% if current_user.is_authenticated %}
+            <a class="button is-danger" href="{{ url_for('meta.disconnect') }}">Disconnect</a>
+            {% if current_user.moderator %}
+              <a class="button is-warning" href="{{ url_for('meme.mod') }}" up-preload up-follow=".container">Mod</a>
+            {% endif %}
+            <a class="button is-primary" href="{{ url_for('meme.publish') }}" up-follow=".container">New Meme</a>
+          {% else %}
+            <a class="button is-primary" id="metamaskConnect" onclick="onboardMetaMask();">Connect</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

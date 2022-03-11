@@ -2,10 +2,9 @@
 <html>
   {% include 'includes/head.html' %}
   <body>
+  {% include 'includes/navbar.html' %}
   <section class="section">
     <div class="container">
-      {% include 'includes/navbar.html' %}
-
       <div class="screen">
       <form method="POST" enctype="multipart/form-data" class="site-form" action="{{ url_for('meta.remotes') }}" style="padding-top:1.5em;">
         <div class="field">
