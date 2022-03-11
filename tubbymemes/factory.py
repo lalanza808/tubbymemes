@@ -10,7 +10,7 @@ from tubbymemes import config
 
 
 db = SQLAlchemy()
-w3 = Web3(Web3.HTTPProvider(config.AVAX_RPC))
+w3 = Web3(Web3.HTTPProvider())
 
 
 def setup_db(app: Flask, db: SQLAlchemy = db):

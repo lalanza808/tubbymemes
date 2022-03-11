@@ -2,11 +2,7 @@
 SECRET_KEY=vrBWMR2$nCdPuZ27
 DATA_FOLDER=/opt/tubbymemes/data
 SERVER_NAME=myservername.com
-AVAX_RPC=https://api.avax.network/ext/bc/C/rpc
-TESTNET=0
-WEB3_PROVIDER_URI=https://api.avax.network/ext/bc/C/rpc
 
 # Test env - delete this line and unused config
 SECRET_KEY=vrBWMR2$nCdPuZ27
-DATA_FOLDER=/opt/tubbymemes/data
-WEB3_PROVIDER_URI=https://api.avax-test.network/ext/bc/C/rpc
+DATA_FOLDER=/path/to/git/repo + /data
