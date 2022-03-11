@@ -23,7 +23,7 @@ def add(address):
     """
     Add server moderators by address.
     """
-    user = User.query.filter(User.public_address == address).first()
+    user = User.query.filter(User.public_address == address.lower()).first()
     if user:
         if not user.moderator:
             user.moderator = True
