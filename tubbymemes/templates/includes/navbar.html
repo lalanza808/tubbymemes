@@ -11,12 +11,12 @@
     </div>
 
     <div class="navbar-end">
-      <a class="navbar-item" href="{{ url_for('meme.index') }}" up-preload up-follow=".container">
-        Home
+      <a class="navbar-item navbar-item-link" {% if request.path == '/' %}style="border-bottom: 4px solid #ff7fbf; padding-bottom: 4px;"{% endif %} href="{{ url_for('meme.index') }}" up-preload up-follow=".container">
+        <strong>Home</strong>
       </a>
 
-      <a class="navbar-item" href="{{ url_for('meta.about') }}" up-preload up-follow=".container">
-        About
+      <a class="navbar-item navbar-item-link" {% if request.path == '/about' %}style="border-bottom: 4px solid #ff7fbf; padding-bottom: 4px;"{% endif %} href="{{ url_for('meta.about') }}" up-preload up-follow=".container">
+        <strong>About</strong>
       </a>
       <div class="navbar-item">
         <div class="buttons">
