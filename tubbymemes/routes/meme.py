@@ -20,7 +20,7 @@ bp = Blueprint('meme', 'meme')
 def index():
     memes = Meme.query.filter(
         Meme.approved == True
-    ).order_by(Meme.create_date.desc())
+    ).order_by(Meme.create_date.desc()).all()
     return render_template('index.html', memes=memes)
 
 
