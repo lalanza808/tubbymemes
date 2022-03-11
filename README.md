@@ -4,15 +4,12 @@ Meme site dedicated to the best project on the Etherium network ;)
 
 https://tubbycats.xyz/about
 
-Memes are backed by Interplanetary Filesystem, server federation / content sharing, and optionally Avalanche network via a smart contract with some useful features (if you're into that). It's a decentralized application (dApp); it's preferred you run it locally and bootstrap the services on your own machine.
-
 ## Setup
 
 Tools you will need:
 * https://ipfs.io/#install
 * python3 (linux os will have this)
 * python3-venv
-* https://github.com/ava-labs/avalanchego/ (optional)
 
 ### Development
 
@@ -28,14 +25,8 @@ cp env-example .env && vim .env
 # install ipfs
 sudo make install-ipfs
 
-# optional: install avalanchego
-make install-avax
-
 # run ipfs
 make run-ipfs
-
-# optional: run avalanchego
-make run-avax
 
 # initialize sqlite database w/ schema via alembic
 make init
