@@ -35,10 +35,6 @@
               <img src="/static/img/twitter.svg" width=25>  Share dis, nephew
             </a>
             <hr>
-
-            {% if meme.meta_ipfs_hash %}
-            <p><strong>Metadata IPFS:</strong></br><a href="{{ meta_url }}" target="_blank">{{ meme.meta_ipfs_hash }}</a></p>
-            {% endif %}
             {% if meme.meme_ipfs_hash %}
             <p><strong>Meme IPFS:</strong></br><a href="{{ meme_url }}" target="_blank">{{ meme.meme_ipfs_hash }}</a></p>
             {% endif %}
