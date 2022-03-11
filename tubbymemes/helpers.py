@@ -30,10 +30,7 @@ def upload_to_ipfs(meme_id: str):
             'image': f'ipfs://{artwork_hash}',
             'create_date': meme.create_date.strftime('%Y-%m-%d %H:%M:%S'),
             'file_name': meme.file_name,
-            'ipfs_hash': artwork_hash,
-            'properties': {
-                'creator_address': meme.user.public_address
-            }
+            'ipfs_hash': artwork_hash
         }
         meta_hash = client.add_json(meta)
         print(f'[+] Uploaded metadata to IPFS: {meta_hash}')

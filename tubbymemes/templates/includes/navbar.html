@@ -25,10 +25,10 @@
             {% if current_user.moderator %}
               <a class="button is-warning" href="{{ url_for('meme.mod') }}" up-preload up-follow=".container">Mod</a>
             {% endif %}
-            <a class="button is-primary" href="{{ url_for('meme.publish') }}" up-follow=".container">New Meme</a>
           {% else %}
-            <a class="button is-primary" id="metamaskConnect" onclick="onboardMetaMask();">Connect</a>
+            <a class="button is-warning" id="metamaskConnect" onclick="onboardMetaMask();">Connect</a>
           {% endif %}
+          <a class="button is-primary" href="{{ url_for('meme.publish') }}" up-follow=".container">New Meme</a>
         </div>
       </div>
     </div>

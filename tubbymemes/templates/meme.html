@@ -36,7 +36,6 @@
             </a>
             <hr>
 
-            <p><strong>Poster Address: </strong></br><span style="word-wrap: break-word"><a href="{{ meme.user.public_address | show_etherscan }}" target="_blank">{{ meme.user.public_address }}</a></span></p>
             {% if meme.meta_ipfs_hash %}
             <p><strong>Metadata IPFS:</strong></br><a href="{{ meta_url }}" target="_blank">{{ meme.meta_ipfs_hash }}</a></p>
             {% endif %}

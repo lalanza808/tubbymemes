@@ -40,9 +40,6 @@ def mod():
 
 @bp.route('/publish', methods=['GET', 'POST'])
 def publish():
-    if not current_user.is_authenticated:
-        flash('You need to connect your wallet first.', 'warning')
-        return redirect(url_for('meme.index'))
     meme = None
     try:
         client = ipfsApi.Client('127.0.0.1', 5001)
@@ -64,16 +61,19 @@ def publish():
         )
         full_path = f'{config.DATA_FOLDER}/uploads/{filename}'
         file.save(full_path)
+        id = None
+        if current_user.is_authenticated:
+            id = current_user.id
         try:
             meme = Meme(
                 file_name=filename,
                 title=title,
                 description=description,
-                user_id=current_user.id
+                user_id=id
             )
             db.session.add(meme)
             db.session.commit()
-            if current_user.verified or current_user.moderator:
+            if current_user.is_authenticated and (current_user.verified or current_user.moderator):
                 res = upload_to_ipfs(meme.id)
                 meme.meta_ipfs_hash = res[0]
                 meme.meme_ipfs_hash = res[1]

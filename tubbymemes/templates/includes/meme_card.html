@@ -27,9 +27,11 @@
       </div>
       <div class="media-content">
         <p class="title is-4">{{ meme.title }}</p>
+        {#
         <p class="subtitle is-6">
           <a href="{{ meme.user.public_address | show_etherscan }}" target="_blank">({{ meme.user.public_address | shorten_address }})</a>
         </p>
+        #}
       </div>
     </div>
 
