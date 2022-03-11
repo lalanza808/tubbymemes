@@ -14,7 +14,7 @@ def list():
     List current server moderators.
     """
     for mod in User.query.filter(User.moderator == True):
-        click.echo(f'{mod.user.id} - {mod.user.public_address}')
+        click.echo(f'{mod.id} - {mod.public_address}')
 
 
 @bp.cli.command('add')
