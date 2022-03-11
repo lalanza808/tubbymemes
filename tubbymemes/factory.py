@@ -45,13 +45,12 @@ def create_app():
 
     with app.app_context():
         from tubbymemes import filters
-        from tubbymemes.routes import api, meme, meta, user
+        from tubbymemes.routes import api, meme, meta
         from tubbymemes.cli import mod, cli
         app.register_blueprint(filters.bp)
         app.register_blueprint(api.bp)
         app.register_blueprint(meme.bp)
         app.register_blueprint(meta.bp)
-        app.register_blueprint(user.bp)
         app.register_blueprint(mod.bp)
         app.register_blueprint(cli.bp)
         return app
