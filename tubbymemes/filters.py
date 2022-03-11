@@ -21,11 +21,8 @@ def humanize(d):
     return arrow_get(d).humanize()
 
 @bp.app_template_filter()
-def show_snowtrace(s) -> str:
+def show_etherscan(s) -> str:
     """
     Return proper links to Etherscan based upon the currently configured network.
     """
-    if config.CONTRACT_TESTNET:
-        return f'https://testnet.snowtrace.io/search?f=0&q={s}'
-    else:
-        return f'https://snowtrace.io/search?f=0&q={s}'
+    return f'https://etherscan.io/address/{s}'
