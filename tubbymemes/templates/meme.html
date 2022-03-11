@@ -36,12 +36,12 @@
             </a>
             <hr>
 
-            <p><strong>Poster Address: </strong></br><span style="word-wrap: break-word"><a href="{{ meme.user.public_address | show_etherscan }}">{{ meme.user.public_address }}</a></span></p>
+            <p><strong>Poster Address: </strong></br><span style="word-wrap: break-word"><a href="{{ meme.user.public_address | show_etherscan }}" target="_blank">{{ meme.user.public_address }}</a></span></p>
             {% if meme.meta_ipfs_hash %}
-            <p><strong>Metadata IPFS:</strong></br><a href="{{ meta_url }}" target=_self>{{ meme.meta_ipfs_hash }}</a></p>
+            <p><strong>Metadata IPFS:</strong></br><a href="{{ meta_url }}" target="_blank">{{ meme.meta_ipfs_hash }}</a></p>
             {% endif %}
             {% if meme.meme_ipfs_hash %}
-            <p><strong>Meme IPFS:</strong></br><a href="{{ meme_url }}" target=_self>{{ meme.meme_ipfs_hash }}</a></p>
+            <p><strong>Meme IPFS:</strong></br><a href="{{ meme_url }}" target="_blank">{{ meme.meme_ipfs_hash }}</a></p>
             {% endif %}
 
             {% if not meme.approved %}
