@@ -12,18 +12,6 @@ from tubbymemes import config
 def rand_id():
     return uuid4().hex
 
-
-class Moderator(db.Model):
-    __tablename__ = 'moderators'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('User', back_populates='moderator')
-
-    def __rep__(self):
-        return self.user.handle
-
-
 class User(db.Model):
     __tablename__ = 'users'
 
@@ -31,16 +19,11 @@ class User(db.Model):
     register_date = db.Column(db.DateTime, default=datetime.utcnow)
     last_login_date = db.Column(db.DateTime, nullable=True)
     verified = db.Column(db.Boolean, default=False)
+    moderator = db.Column(db.Boolean, default=False)
     public_address = db.Column(db.String(180))
     nonce = db.Column(db.String(180), default=rand_id())
     nonce_date = db.Column(db.DateTime, default=datetime.utcnow)
-    handle = db.Column(db.String(40), unique=True)
-    bio = db.Column(db.String(600), nullable=True)
-    profile_image = db.Column(db.String(300), nullable=True)
-    ipfs_hash = db.Column(db.String(100), nullable=True)
-    wownero_address = db.Column(db.String(120), nullable=True)
-    website_url = db.Column(db.String(120), nullable=True)
-    moderator = db.relationship('Moderator', back_populates='user')
+    ens_address = db.Column(db.String(80), unique=True)
     memes = db.relationship('Meme', back_populates='user')
 
     def as_dict(self):
@@ -48,7 +31,7 @@ class User(db.Model):
             for c in inspect(self).mapper.column_attrs if c.key != 'nonce'}
 
     def __repr__(self):
-        return str(self.handle)
+        return str(self.id)
 
     @property
     def is_authenticated(self):
@@ -62,24 +45,11 @@ class User(db.Model):
     def is_anonymous(self):
         return False
 
-    @property
-    def is_admin(self):
-        return self.admin
-
     def is_moderator(self):
-        return len(self.moderator) > 0
+        return self.moderator
 
     def get_id(self):
         return self.id
-
-    def get_profile_image(self, full=True):
-        if self.profile_image:
-            if full:
-                return url_for('meta.uploaded_file', filename=self.profile_image) # noqa
-            else:
-                return self.profile_image
-        else:
-            return '/static/img/logo.png'
 
     def generate_nonce(self):
         return rand_id()

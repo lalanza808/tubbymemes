@@ -27,15 +27,12 @@ def memes():
 @bp.route('/user_exists')
 def user_exists():
     """
-    Check to see if a given user exists (handle or wallet address).
+    Check to see if a given user exists (wallet address).
     This logic will help the login/connect MetaMask flow.
     """
     if 'public_address' in request.args:
         query_str = 'public_address'
         query_field = User.public_address
-    elif 'handle' in request.args:
-        query_str = 'handle'
-        query_field = User.handle
     else:
         return jsonify({'success': False})
 
@@ -54,48 +51,6 @@ def user_exists():
     })
 
 
-@bp.route('/update/user', methods=['POST'])
-def update_user():
-    if not current_user.is_authenticated:
-        return jsonify({
-            'success': False,
-            'message': 'Must be authenticated in order to update.'
-        })
-
-    data = request.get_json()
-    _u = User.query.get(int(data['user_id']))
-
-    if _u:
-        if current_user.id == _u.id:
-            user_exists = User.query.filter(
-                User.handle == data['handle']
-            ).first()
-            if user_exists and not current_user.id == user_exists.id:
-                return jsonify({
-                    'success': False,
-                    'message': 'That user handle already exists on this server'
-                })
-            _u.wownero_address = data['wownero_address']
-            _u.ipfs_hash = data['ipfs_hash']
-            _u.handle = data['handle']
-            db.session.commit()
-            return jsonify({
-                'success': True,
-                'message': 'Updated user record.'
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'Cannot edit another record.'
-            })
-
-    else:
-        return jsonify({
-            'success': False,
-            'message': 'User does not exist.'
-        })
-
-
 @bp.route('/authenticate/metamask', methods=['POST'])
 def authenticate_metamask():
     """
@@ -104,8 +59,8 @@ def authenticate_metamask():
     (`personal_sign` method).
 
     This route will verify the signed data against the user's public ETH
-    address. If no user exists, they get an entry in the database with a
-    default handle assigned. If user does exist, they get logged in.
+    address. If no user exists, they get an entry in the database.
+    If user does exist, they get logged in.
     """
     data = request.get_json()
     if current_user.is_authenticated:
@@ -142,8 +97,6 @@ def authenticate_metamask():
             public_address=data['public_address'].lower()
         )
         db.session.add(user)
-        db.session.commit()
-        user.handle = f'anon{user.id}-{rand_str}'
         db.session.commit()
         user.login()
         return jsonify({

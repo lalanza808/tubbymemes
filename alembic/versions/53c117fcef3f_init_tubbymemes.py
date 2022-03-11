@@ -30,17 +30,13 @@ def upgrade():
     sa.Column('register_date', sa.DateTime(), nullable=True),
     sa.Column('last_login_date', sa.DateTime(), nullable=True),
     sa.Column('verified', sa.Boolean(), nullable=True),
+    sa.Column('moderator', sa.Boolean(), nullable=True),
     sa.Column('public_address', sa.String(length=180), nullable=True),
+    sa.Column('ens_address', sa.String(length=80), nullable=True),
     sa.Column('nonce', sa.String(length=180), nullable=True),
     sa.Column('nonce_date', sa.DateTime(), nullable=True),
-    sa.Column('handle', sa.String(length=40), nullable=True),
-    sa.Column('bio', sa.String(length=600), nullable=True),
-    sa.Column('profile_image', sa.String(length=300), nullable=True),
-    sa.Column('ipfs_hash', sa.String(length=100), nullable=True),
-    sa.Column('wownero_address', sa.String(length=120), nullable=True),
-    sa.Column('website_url', sa.String(length=120), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('handle')
+    sa.UniqueConstraint('id')
     )
     op.create_table('memes',
     sa.Column('id', sa.String(length=80), nullable=False),
@@ -60,16 +56,9 @@ def upgrade():
     sa.UniqueConstraint('meme_ipfs_hash'),
     sa.UniqueConstraint('meta_ipfs_hash')
     )
-    op.create_table('moderators',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
 
 
 def downgrade():
-    op.drop_table('moderators')
     op.drop_table('memes')
     op.drop_table('users')
     op.drop_table('remotes')
