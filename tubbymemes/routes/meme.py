@@ -29,7 +29,7 @@ def mod():
     if not current_user.is_authenticated:
         flash('You must be logged in and have MetaMask wallet connected.', 'warning')
         return redirect(url_for('meme.index'))
-    if not current_user.is_moderator():
+    if not current_user.moderator:
         flash('You are not a moderator.', 'warning')
         return redirect(url_for('meme.index'))
     memes = Meme.query.filter(
@@ -43,9 +43,6 @@ def publish():
     if not current_user.is_authenticated:
         flash('You need to connect your wallet first.', 'warning')
         return redirect(url_for('meme.index'))
-    if not current_user.wownero_address:
-        flash('You need to specify your Wownero wallet address first.', 'warning')
-        return redirect(url_for('user.show', handle=current_user.handle))
     meme = None
     try:
         client = ipfsApi.Client('127.0.0.1', 5001)
@@ -76,7 +73,7 @@ def publish():
             )
             db.session.add(meme)
             db.session.commit()
-            if current_user.verified or current_user.is_moderator():
+            if current_user.verified or current_user.moderator:
                 res = upload_to_ipfs(meme.id)
                 meme.meta_ipfs_hash = res[0]
                 meme.meme_ipfs_hash = res[1]
@@ -104,7 +101,7 @@ def show(meme_id):
     if not meme.approved and not current_user.is_authenticated:
         flash('You need to be logged in to view that meme.', 'warning')
         return redirect(url_for('meme.index'))
-    elif not meme.approved and not current_user.is_moderator():
+    elif not meme.approved and not current_user.moderator:
         flash('You need to be a moderator to view that meme.', 'warning')
         return redirect(url_for('meme.index'))
     return render_template('meme.html', meme=meme)
@@ -115,7 +112,7 @@ def approve(meme_id, action):
     if not current_user.is_authenticated:
         flash('You need to be logged in to reach this page.', 'warning')
         return redirect(url_for('meme.index'))
-    if not current_user.is_moderator():
+    if not current_user.moderator:
         flash('You need to be a moderator to reach this page.', 'warning')
         return redirect(url_for('meme.index'))
     meme = Meme.query.get(meme_id)

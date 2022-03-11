@@ -21,17 +21,14 @@
   <div class="card-content">
     <div class="media">
       <div class="media-left">
-        {% if meme.user.profile_image %}
         <figure class="image is-48x48">
-          <img src="{{ url_for('meta.uploaded_file', filename=meme.user.profile_image) }}" alt="{{ meme.user.handle }} pfp">
+          <img src="/static/img/logo.png" alt="{{ meme.user.id }} pfp">
         </figure>
-        {% endif %}
       </div>
       <div class="media-content">
         <p class="title is-4">{{ meme.title }}</p>
         <p class="subtitle is-6">
-          <a href="{{ url_for('user.show', handle=meme.user.handle) }}">{{ meme.user.handle }}</a>
-          <a href="{{ meme.user.public_address | show_snowtrace }}" target="_blank">({{ meme.user.public_address | shorten_address }})</a>
+          <a href="{{ meme.user.public_address | show_etherscan }}" target="_blank">({{ meme.user.public_address | shorten_address }})</a>
         </p>
       </div>
     </div>

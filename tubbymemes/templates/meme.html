@@ -30,27 +30,16 @@
             {% endif %}
             {% endif %}
             <br/>
-            <p><strong>Meme ID:</strong> <code>{{ meme }}</code></p>
-            <p><strong>Title:</strong> {{ meme.title }}</p>
-            <p><strong>Description:</strong> {{ meme.description }}</p>
-            <p><strong>Poster Address:</strong> <a href="{{ url_for('user.show', handle=meme.user.handle) }}">{{ meme.user.handle }}</a></p>
-            {% if meme.user.wownero_address %}
-            <p><strong>Wownero Address:</strong> <span style="word-wrap: break-word">{{ meme.user.wownero_address }}</p>
-            {% endif %}
+            <h1 class="title"><strong>{{ meme.title }}</strong></h1>
+            <h1 class="subtitle"><strong>{{ meme.description }}</strong></h1>
+            <hr>
+
+            <p><strong>Poster Address: </strong></br><span style="word-wrap: break-word"><a href="{{ meme.user.public_address | show_etherscan }}">{{ meme.user.public_address }}</a></span></p>
             {% if meme.meta_ipfs_hash %}
-            <p><strong>Meta IPFS:</strong> <a href="{{ meta_url }}" target=_self>{{ meme.meta_ipfs_hash }}</a></p>
+            <p><strong>Metadata IPFS:</strong></br><a href="{{ meta_url }}" target=_self>{{ meme.meta_ipfs_hash }}</a></p>
             {% endif %}
             {% if meme.meme_ipfs_hash %}
-            <p><strong>Meme IPFS:</strong> <a href="{{ meme_url }}" target=_self>{{ meme.meme_ipfs_hash }}</a></p>
-            {% endif %}
-            {% if meme.minted %}
-            <p>
-              <strong>Tips Received:</strong>
-              <span id="wowTips">?</span> WOW,
-              <span id="wowxTips">?</span> WOWX,
-              <span id="avaxTips">?</span> AVAX
-            </p>
-            <p><strong>Token ID:</strong> <span id="tokenId">? </span> <a href="{{ config.CONTRACT_ADDRESS | show_snowtrace }}">(contract)</a></p>
+            <p><strong>Meme IPFS:</strong></br><a href="{{ meme_url }}" target=_self>{{ meme.meme_ipfs_hash }}</a></p>
             {% endif %}
 
             {% if not meme.approved %}
@@ -65,86 +54,17 @@
             </div>
             {% else %}
             <br/>
-            <div id="tipButtons" class="columns" style="display:none;">
-              {% if meme.user.wownero_address %}
-              <div class="column">
-                <a class="button is-info is-12" onclick="tipWOW()" id="tipWOWButton" style="width:100%;">Tip via p2p WOW</a>
+            <div id="tipButtons" class="columns">
+              <div class="column is-one-quarter">
+                <input class="input" type="number" step=".001" value="0.002" id="tipAmount">
               </div>
-              {% endif %}
               <div class="column">
-                <a class="button is-info is-12" onclick="tipSC()" id="tipSCButton" style="width:100%;">Tip via Smart Contract</a>
-              </div>
-            </div>
-            <div id="mintButtons" class="columns" style="display:none;">
-              {% if meme.user.wownero_address %}
-              <div class="column is-one-third">
-                <a class="button is-info" onclick="tipWOW()" id="tipWOWButton" style="width:100%;">Tip via p2p WOW</a>
-              </div>
-              {% endif %}
-              <div class="column">
-                <a class="button is-danger" onclick="mint()" id="mintButton" style="width:100%;">Mint to AVAX</a>
+                <a class="button is-info is-12" id="tipButton" style="width:100%;">Tip this poster</a>
               </div>
             </div>
             {% endif %}
 
-            <div id="tipWOWModal" class="modal">
-              <div class="modal-background"></div>
-              <div class="modal-card">
-                <header class="modal-card-head">
-                  <p class="modal-card-title">Tip via WOW p2p</p>
-                  <button class="delete" aria-label="close" id="closeWOWModal"></button>
-                </header>
-                <section class="modal-card-body">
-                  <p style="word-wrap: break-word;">
-                    <strong>Wownero Address (p2p):</strong>
-                    <span id="wowneroAddress">{{ meme.user.wownero_address | default('?') }}</span>
-                  </p>
-                  </br>
-                  <p>
-                    Funds sent to this address will not be tracked as they are a direct,
-                    p2p transaction on the anonymous, private Wownero network.
-                    Nobody will have visibility into these and will not be shown.
-                  </p>
-                  </br>
-                  <a href="https://wownero.org/#wallets" target="_blank">Wownero Wallets</a>
-                </section>
-                <footer class="modal-card-foot">
-                </footer>
-              </div>
             </div>
-
-            <div id="tipSCModal" class="modal">
-              <div class="modal-background"></div>
-              <div class="modal-card">
-                <header class="modal-card-head">
-                  <p class="modal-card-title">Tip via Smart Contract</p>
-                  <button class="delete" aria-label="close" id="closeSCModal"></button>
-                </header>
-                <section class="modal-card-body">
-                  <p>
-                    Sending a tip via the <a href="{{ config.CONTRACT_ADDRESS | show_snowtrace }}" target="_blank">tubbymemes smart contract</a> will send a small amount to the
-                    publisher (the address that minted the meme) and the contract owner ({{ config.CONTRACT_OWNER }}), and the remainder is sent to the meme creator (whoever uploaded it). Everyone gets tipped for their contribution, but primarily the meme creator.
-                  </p>
-                  </br>
-                  <p>
-                    Input the amount of WOWX or AVAX you would like to send and click a button below to sign the transaction in MetaMask wallet.
-                  </p>
-                  </br>
-                  <div class="field">
-                    <label class="label">Tip Amount</label>
-                    <div class="control">
-                      <input id="tipSCAmount" class="input" type="text" placeholder=".042069">
-                    </div>
-                  </div>
-                </section>
-                <footer class="modal-card-foot">
-                  <button id="tipWOWXButton" class="button is-success" onclick="tipWOWX()">Tip WOWX</button>
-                  <button id="tipAVAXButton" class="button" onclick="tipAVAX()">Tip AVAX</button>
-                </footer>
-              </div>
-            </div>
-
-          </div>
         </div>
       {% endif %}
 
@@ -152,170 +72,39 @@
   </section>
   {% include 'includes/footer.html' %}
   {% if meme.approved %}
+  <script src="/static/js/vendor/web3-1.3.6.min.js"></script>
+  <script src="/static/js/main.js"></script>
   <script type="text/javascript">
     window.addEventListener('DOMContentLoaded', async () => {
-      // Show buttons depending on if minted or not
-      let minted = await isMinted('{{ meme.meta_ipfs_hash }}');
-      if (minted) {
-        document.getElementById('tipButtons').style.display = "flex";
-      } else {
-        document.getElementById('mintButtons').style.display = "flex";
+      const w3 = new Web3(Web3.givenProvider);
+      document.getElementById('tipButton').onclick = async () => {
+        document.getElementById('tipButton').classList.add('is-loading');
+        const walletAddress = await getMetamaskAccount();
+        const tipAmount = document.getElementById('tipAmount').value;
+        const tipAmountWei = w3.utils.toWei(tipAmount);
+        const tipAmountHex = Number(tipAmountWei).toString(16);
+        try {
+          notif(`Tipping ${tipAmount} ETH to poster {{ meme.user.public_address | shorten_address }} for meme {{ meme.id }}.`, 'info');
+          await ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [
+              {
+                from: walletAddress,
+                to: "{{ meme.user.public_address }}",
+                value: tipAmountHex
+              },
+            ],
+          })
+            .then((txHash) => {
+              console.log(txHash);
+            })
+          window.location.href = "";
+        } catch(e) {
+          notif(e.message, 'warning');
+          document.getElementById('tipButton').classList.remove('is-loading');
+        }
       }
-
-      // Show tip amounts
-      try {
-        const tokenId = await getTokenID('{{ meme.meta_ipfs_hash }}');
-        const memeDeets = await contract.methods.tokenMeme(tokenId).call();
-        document.getElementById('tokenId').innerHTML = tokenId;
-        document.getElementById('wowxTips').innerHTML = await w3.utils.fromWei(memeDeets.creatorTipsWOWX);
-        document.getElementById('avaxTips').innerHTML = await w3.utils.fromWei(memeDeets.creatorTipsAVAX);
-      } catch(e) {
-        console.log(e);
-      }
-    });
-
-    async function tipWOW() {
-      document.getElementById('tipWOWButton').classList.add('is-loading');
-      document.getElementById('tipWOWModal').classList.add('is-active');
-      document.getElementById('closeWOWModal').onclick = () => {
-        document.getElementById('tipWOWModal').classList.remove('is-active');
-        document.getElementById('tipWOWButton').classList.remove('is-loading');
-      }
-    }
-
-    async function tipSC() {
-      document.getElementById('tipSCButton').classList.add('is-loading');
-      document.getElementById('tipSCModal').classList.add('is-active');
-      document.getElementById('closeSCModal').onclick = () => {
-        document.getElementById('tipSCModal').classList.remove('is-active');
-        document.getElementById('tipSCButton').classList.remove('is-loading');
-      }
-    }
-
-    async function getTipAmount() {
-      const amt = document.getElementById('tipSCAmount').value;
-      if (isNaN(amt)) {
-        notif('You must provide a number.', 'warning');
-        return false;
-      } else {
-        return amt;
-      }
-    }
-
-    async function tipAVAX() {
-      document.getElementById('tipAVAXButton').classList.add('is-loading');
-      const tokenId = await getTokenID('{{ meme.meta_ipfs_hash }}');
-      const walletAddress = await getMetamaskAccount();
-      const tipAmount = await getTipAmount();
-      if (!tipAmount) {
-        document.getElementById('tipAVAXButton').classList.remove('is-loading');
-        return false;
-      }
-      const tipAmountWei = w3.utils.toWei(tipAmount);
-      const gasPrice = await w3.eth.getGasPrice();
-      try {
-        const gasLimit = await contract.methods.tipAVAX(tokenId, tipAmountWei).estimateGas({from: walletAddress, value: tipAmountWei}, function(err, gas){
-          return gas;
-        });
-        notif(`Tipping ${tipAmount} AVAX to meme "{{ meme.id | shorten_address }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" via the Avalanche blockchain.`, 'info');
-        let res = await contract.methods.tipAVAX(tokenId, tipAmountWei).send({
-          from: walletAddress,
-          value: tipAmountWei,
-          gasPrice: gasPrice,
-          gas: gasLimit
-        });
-        console.log(res);
-        window.location.href = "";
-      } catch(e) {
-        notif(e.message, 'warning');
-        document.getElementById('tipAVAXButton').classList.remove('is-loading');
-      }
-    }
-
-    async function approveWOWX(amountWei) {
-      const walletAddress = await getMetamaskAccount();
-      const allowanceWei = await wowxContract.methods.allowance(walletAddress, contractAddress).call();
-      if (amountWei <= allowanceWei) {
-        return true;
-      }
-      const gasPrice = await w3.eth.getGasPrice();
-      const gasLimit = await wowxContract.methods.approve(contractAddress, amountWei).estimateGas({from: walletAddress}, function(err, gas){
-        return gas;
-      });
-      try {
-        notif(`Approving usage of WOWX token.`, 'info');
-        let res = await wowxContract.methods.approve(contractAddress, amountWei).send({
-          from: walletAddress,
-          gasPrice: gasPrice,
-          gas: gasLimit
-        });
-        console.log(res);
-        return true;
-      } catch(e) {
-        notif(e.message, 'warning');
-      }
-    }
-
-    async function tipWOWX() {
-      document.getElementById('tipWOWXButton').classList.add('is-loading');
-      const tipAmount = await getTipAmount();
-      if (!tipAmount) {
-        document.getElementById('tipWOWXButton').classList.remove('is-loading');
-        return false;
-      }
-      const tipAmountWei = w3.utils.toWei(tipAmount);
-      const tokenId = await getTokenID('{{ meme.meta_ipfs_hash }}');
-      const walletAddress = await getMetamaskAccount();
-      const approved = await approveWOWX(tipAmountWei);
-      if (!approved) {
-        document.getElementById('tipWOWXButton').classList.remove('is-loading');
-        return false;
-      }
-      const gasPrice = await w3.eth.getGasPrice();
-      try {
-        const gasLimit = await contract.methods.tipWOWX(tokenId, tipAmountWei).estimateGas({from: walletAddress}, function(err, gas){
-          return gas;
-        });
-        notif(`Tipping ${tipAmount} WOWX to meme "{{ meme.id | shorten_address }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})".`, 'info');
-        let res = await contract.methods.tipWOWX(tokenId, tipAmountWei).send({
-          from: walletAddress,
-          gasPrice: gasPrice,
-          gas: gasLimit
-        });
-        console.log(res);
-        window.location.href = "";
-      } catch(e) {
-        notif(e.message, 'warning');
-        document.getElementById('tipWOWXButton').classList.remove('is-loading');
-      }
-    }
-
-    async function mint() {
-      if (await isMinted('{{ meme.meta_ipfs_hash }}')) {
-        notif('Already minted!', 'warning');
-        return
-      }
-      document.getElementById('mintButton').classList.add('is-loading');
-      const walletAddress = await getMetamaskAccount();
-      const gasPrice = await w3.eth.getGasPrice();
-      const gasLimit = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").estimateGas({from: walletAddress}, function(err, gas){
-        return gas;
-      });
-      try {
-        notif(`Minting meme "{{ meme.id | shorten_address }}" by "{{ meme.user.handle }} ({{ meme.user.public_address | shorten_address }})" to the Avalanche blockchain.`, 'info');
-        let res = await contract.methods.mint("{{ meme.meta_ipfs_hash }}", "{{ meme.user.public_address }}").send({
-          from: walletAddress,
-          value: 0,
-          gasPrice: gasPrice,
-          gas: gasLimit
-        });
-        console.log(res);
-        window.location.href = "";
-      } catch(e) {
-        notif(e.message, 'warning');
-        document.getElementById('mintButton').classList.remove('is-loading');
-      }
-    }
+    })
   </script>
   {% endif %}
   </body>
