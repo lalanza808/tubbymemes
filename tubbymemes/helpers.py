@@ -6,19 +6,6 @@ from tubbymemes.factory import w3
 from tubbymemes import config
 
 
-def get_eth_contract():
-    """
-    Return a web3 contract object with the currently
-    deployed tubbymemes smart contract.
-    """
-    contract_abi = config.CONTRACT_ABI
-    contract_address = w3.toChecksumAddress(config.CONTRACT_ADDRESS)
-    return w3.eth.contract(
-        address=contract_address,
-        abi=contract_abi
-    )
-
-
 def verify_signature(message, signature, public_address):
     msg = encode_defunct(text=message)
     recovered = w3.eth.account.recover_message(msg, signature=signature)
@@ -45,7 +32,6 @@ def upload_to_ipfs(meme_id: str):
             'file_name': meme.file_name,
             'ipfs_hash': artwork_hash,
             'properties': {
-                'creator_handle': meme.user.handle,
                 'creator_address': meme.user.public_address
             }
         }
