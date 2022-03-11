@@ -54,16 +54,6 @@
                 <a class="button is-danger is-12 column" href="{{ url_for('meme.approve', meme_id=meme.id, action='deny') }}">Deny</a>
               </div>
             </div>
-            {% else %}
-            <br/>
-            <div id="tipButtons" class="columns">
-              <div class="column is-one-quarter">
-                <input class="input" type="number" step=".001" value="0.002" id="tipAmount">
-              </div>
-              <div class="column">
-                <a class="button is-info is-12" id="tipButton" style="width:100%;">Tip this poster</a>
-              </div>
-            </div>
             {% endif %}
 
             </div>
@@ -73,41 +63,5 @@
     </div>
   </section>
   {% include 'includes/footer.html' %}
-  {% if meme.approved %}
-  <script src="/static/js/vendor/web3-1.3.6.min.js"></script>
-  <script src="/static/js/main.js"></script>
-  <script type="text/javascript">
-    window.addEventListener('DOMContentLoaded', async () => {
-      const w3 = new Web3(Web3.givenProvider);
-      document.getElementById('tipButton').onclick = async () => {
-        document.getElementById('tipButton').classList.add('is-loading');
-        const walletAddress = await getMetamaskAccount();
-        const tipAmount = document.getElementById('tipAmount').value;
-        const tipAmountWei = w3.utils.toWei(tipAmount);
-        const tipAmountHex = Number(tipAmountWei).toString(16);
-        try {
-          notif(`Tipping ${tipAmount} ETH to poster {{ meme.user.public_address | shorten_address }} for meme {{ meme.id }}.`, 'info');
-          await ethereum.request({
-            method: 'eth_sendTransaction',
-            params: [
-              {
-                from: walletAddress,
-                to: "{{ meme.user.public_address }}",
-                value: tipAmountHex
-              },
-            ],
-          })
-            .then((txHash) => {
-              console.log(txHash);
-            })
-          window.location.href = "";
-        } catch(e) {
-          notif(e.message, 'warning');
-          document.getElementById('tipButton').classList.remove('is-loading');
-        }
-      }
-    })
-  </script>
-  {% endif %}
   </body>
 </html>
